@@ -1,0 +1,83 @@
+import { useState, useCallback } from 'react';
+import axios from 'axios';
+
+export function useFileUpload(toolSlug) {
+    const [appState, setAppState] = useState('upload'); // 'upload' | 'processing' | 'success' | 'error'
+    const [progress, setProgress] = useState(0);
+    const [resultUrl, setResultUrl] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const resetState = useCallback(() => {
+        setAppState('upload');
+        setProgress(0);
+        setResultUrl(null);
+        setErrorMsg('');
+    }, []);
+
+    const processFiles = useCallback(async (files, additionalData = {}) => {
+        if (!files || files.length === 0) return;
+
+        setAppState('processing');
+        setProgress(0);
+        setErrorMsg('');
+
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('files', file); // 'files' must match Multer backend
+        });
+
+        Object.keys(additionalData).forEach(key => {
+            formData.append(key, additionalData[key]);
+        });
+
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            const response = await axios.post(`${apiUrl}/api/pdf/${toolSlug}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                responseType: 'blob', // Expect binary data from backend
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setProgress(Math.min(percentCompleted / 2, 50));
+                }
+            });
+
+            let fakeProgress = setInterval(() => {
+                setProgress(p => {
+                    if (p >= 99) {
+                        clearInterval(fakeProgress);
+                        return 99;
+                    }
+                    return p + 2;
+                });
+            }, 300);
+
+            // Handle blob response
+            clearInterval(fakeProgress);
+            setProgress(100);
+
+            // Create ObjectURL for the download
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const downloadUrl = window.URL.createObjectURL(blob);
+
+            setResultUrl(downloadUrl);
+            setAppState('success');
+
+        } catch (error) {
+            console.error('File processing error:', error);
+            setAppState('error');
+            setErrorMsg(error.response?.data?.error?.message || 'An error occurred during file processing.');
+        }
+    }, [toolSlug]);
+
+    return {
+        appState,
+        setAppState,
+        progress,
+        resultUrl,
+        errorMsg,
+        resetState,
+        processFiles
+    };
+}
