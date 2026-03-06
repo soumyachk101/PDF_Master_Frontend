@@ -1,15 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FileText, ChevronDown, Moon, Sun, Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Box, Button, IconButton, Typography, useTheme, Card, Grid } from '@mui/material';
+import { alpha } from '@mui/material/styles';
+import { ChevronDown, Moon, Sun, Menu, X, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, getToolsByCategory } from '../utils/tools';
+import { useColorMode } from '../App';
 
 export default function Navbar() {
-    const [isDark, setIsDark] = useState(false);
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const { mode, toggleColorMode } = useColorMode();
+    const isDark = mode === 'dark';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const dropdownRef = useRef(null);
 
-    // Close dropdown on click outside
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     useEffect(() => {
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -20,121 +33,144 @@ export default function Navbar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const toggleDarkMode = () => {
-        setIsDark(!isDark);
-        document.documentElement.classList.toggle('dark');
-    };
+    const toggleDarkMode = toggleColorMode;
 
     return (
-        <nav className="fixed top-0 w-full z-50 transition-colors duration-300 bg-white/95 dark:bg-[#1A1A2E]/95 backdrop-blur-md border-b border-border dark:border-border-dark h-[64px]">
-            <div className="max-w-content mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
+        <AppBar
+            position="fixed"
+            elevation={scrolled ? 2 : 0}
+            sx={{
+                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                bgcolor: alpha(theme.palette.background.paper, scrolled ? 0.85 : 1),
+                backdropFilter: 'blur(16px)',
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                color: theme.palette.text.primary,
+            }}
+        >
+            <Toolbar
+                disableGutters
+                sx={{
+                    maxWidth: scrolled ? '1024px' : '1200px',
+                    width: '100%',
+                    margin: '0 auto',
+                    borderRadius: scrolled ? '999px' : '0px',
+                    height: '64px',
+                    minHeight: '64px !important',
+                    padding: scrolled ? '0 24px' : '0 16px',
+                    background: scrolled ? theme.palette.background.paper : 'transparent',
+                    boxShadow: scrolled ? theme.shadows[4] : 'none',
+                    border: scrolled ? `1px solid ${theme.palette.divider}` : 'none',
+                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+            >
+                {/* Logo */}
+                <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: 'inherit' }}>
+                    <Box sx={{ position: 'relative', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <motion.div
+                            whileHover={{ rotate: 12, scale: 1.1 }}
+                            style={{ position: 'absolute', inset: 0, backgroundColor: alpha(theme.palette.primary.main, 0.2), borderRadius: '12px', transform: 'rotate(6deg)' }}
+                        />
+                        <img src="/logo.png" alt="PDFKit Logo" style={{ width: 32, height: 32, objectFit: 'contain', position: 'relative', zIndex: 1 }} />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: theme.palette.text.primary }}>
+                        <Box component="span" sx={{ color: theme.palette.primary.main, fontWeight: 900 }}>PDF</Box>Kit
+                    </Typography>
+                </Box>
 
-                {/* Logo Left */}
-                <Link to="/" className="flex items-center gap-3 group">
-                    <img
-                        src="/logo.png"
-                        alt="PDFKit Logo"
-                        className="w-10 h-10 object-contain group-hover:scale-105 transition-transform"
-                    />
-                    <span className="font-display font-bold text-xl tracking-tight text-ink-primary dark:text-white">
-                        <span className="text-primary">PDF</span>Kit
-                    </span>
-                </Link>
+                <Box sx={{ flexGrow: 1 }} />
 
-                {/* Desktop Center Links */}
-                <div className="hidden md:flex items-center gap-8">
-                    <div className="relative" ref={dropdownRef}>
-                        <button
+                {/* Desktop Menu */}
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 4 }}>
+                    <Box ref={dropdownRef} sx={{ position: 'relative' }}>
+                        <Button
+                            color="inherit"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="flex items-center gap-1 font-body font-medium text-ink-primary dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
+                            endIcon={<motion.div animate={{ rotate: isMenuOpen ? 180 : 0 }}><ChevronDown size={14} /></motion.div>}
+                            sx={{ fontWeight: 600, color: theme.palette.text.primary, '&:hover': { color: theme.palette.primary.main, background: 'transparent' } }}
                         >
-                            Tools <ChevronDown size={16} className={`transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
-                        </button>
+                            All Tools
+                        </Button>
 
-                        {/* Mega Menu Dropdown */}
-                        {isMenuOpen && (
-                            <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[800px] bg-white dark:bg-surface-dark rounded-[16px] shadow-modal border border-border dark:border-border-dark p-7 grid grid-cols-4 gap-6 animate-fade-in">
-                                {CATEGORIES.filter(c => c.id !== 'all').map(category => (
-                                    <div key={category.id} className="flex flex-col gap-2">
-                                        <h4 className={`font-display font-bold text-sm`} style={{ color: getToolsByCategory(category.id)[0]?.color }}>
-                                            {category.label}
-                                        </h4>
-                                        <div className="flex flex-col gap-1">
-                                            {getToolsByCategory(category.id).map(tool => (
-                                                <Link
-                                                    key={tool.slug}
-                                                    to={`/tool/${tool.slug}`}
-                                                    onClick={() => setIsMenuOpen(false)}
-                                                    className="font-body text-[13px] text-ink-secondary dark:text-ink-muted hover:text-primary dark:hover:text-primary transition-colors flex items-center gap-2"
-                                                >
-                                                    • {tool.name}
-                                                    {tool.isNew && <span className="bg-primary-light text-primary text-[10px] font-bold px-1.5 py-0.5 rounded">NEW</span>}
-                                                </Link>
+                        <AnimatePresence>
+                            {isMenuOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    transition={{ duration: 0.2 }}
+                                    style={{ position: 'absolute', top: 'calc(100% + 12px)', left: '50%', transform: 'translateX(-50%)', zIndex: 100 }}
+                                >
+                                    <Card sx={{ width: 800, p: 4, borderRadius: '24px' }}>
+                                        <Grid container spacing={4}>
+                                            {CATEGORIES.filter(c => c.id !== 'all').map(category => (
+                                                <Grid item xs={3} key={category.id}>
+                                                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2, textTransform: 'uppercase', color: getToolsByCategory(category.id)[0]?.color }}>
+                                                        {category.label}
+                                                    </Typography>
+                                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                                        {getToolsByCategory(category.id).map(tool => (
+                                                            <Button
+                                                                key={tool.slug}
+                                                                variant="text"
+                                                                onClick={() => { setIsMenuOpen(false); navigate(`/tool/${tool.slug}`); }}
+                                                                sx={{
+                                                                    justifyContent: 'flex-start',
+                                                                    color: theme.palette.text.secondary,
+                                                                    fontWeight: 500,
+                                                                    fontSize: '0.85rem',
+                                                                    p: '4px 8px',
+                                                                    '&:hover': { color: theme.palette.text.primary, backgroundColor: alpha(theme.palette.primary.main, 0.05) }
+                                                                }}
+                                                            >
+                                                                {tool.name}
+                                                                {tool.isNew && (
+                                                                    <Box component="span" sx={{ ml: 'auto', bgcolor: alpha(theme.palette.primary.main, 0.1), color: theme.palette.primary.main, fontSize: '0.6rem', fontWeight: 800, px: 0.8, py: 0.2, borderRadius: '99px' }}>
+                                                                        NEW
+                                                                    </Box>
+                                                                )}
+                                                            </Button>
+                                                        ))}
+                                                    </Box>
+                                                </Grid>
                                             ))}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                                        </Grid>
+                                    </Card>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </Box>
 
-                    <a href="#features" className="font-body font-medium text-ink-primary dark:text-white hover:text-primary transition-colors">Features</a>
-                    <a href="#about" className="font-body font-medium text-ink-primary dark:text-white hover:text-primary transition-colors">About</a>
-                </div>
+                    <Button href="#features" color="inherit" sx={{ fontWeight: 600, color: theme.palette.text.primary, '&:hover': { color: theme.palette.primary.main, background: 'transparent' } }}>Features</Button>
+                    <Button href="#about" color="inherit" sx={{ fontWeight: 600, color: theme.palette.text.primary, '&:hover': { color: theme.palette.primary.main, background: 'transparent' } }}>About</Button>
 
-                {/* Desktop Right */}
-                <div className="hidden md:flex items-center gap-4">
-                    <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-surface dark:hover:bg-surface-deeper text-ink-primary dark:text-white transition-colors">
-                        {isDark ? <Sun size={20} /> : <Moon size={20} />}
-                    </button>
-                    <a href="#tools" className="font-body font-semibold text-sm px-5 py-2.5 rounded-btn border border-border dark:border-border-dark text-ink-primary dark:text-white hover:border-primary hover:text-primary transition-colors">
-                        All Tools
-                    </a>
-                </div>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, ml: 2 }}>
+                        <IconButton onClick={toggleDarkMode} sx={{ color: theme.palette.text.primary }}>
+                            {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
+                        </IconButton>
+                        <Box sx={{ width: '1px', height: 24, bgcolor: theme.palette.divider, mx: 1 }} />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            href="#tools"
+                            endIcon={<ArrowRight size={16} />}
+                            sx={{ borderRadius: '99px', px: 3, fontWeight: 700 }}
+                        >
+                            Get Started
+                        </Button>
+                    </Box>
+                </Box>
 
                 {/* Mobile Toggle */}
-                <div className="md:hidden flex items-center gap-4">
-                    <button onClick={toggleDarkMode} className="text-ink-primary dark:text-white">
-                        {isDark ? <Sun size={24} /> : <Moon size={24} />}
-                    </button>
-                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-ink-primary dark:text-white">
-                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
-                </div>
-            </div>
-
-            {/* Mobile Menu Drawer */}
-            {isMobileMenuOpen && (
-                <div className="md:hidden fixed top-[64px] left-0 w-full h-[calc(100vh-64px)] bg-white dark:bg-[#1A1A2E] overflow-y-auto z-40 animate-slide-down border-t border-border dark:border-border-dark p-6">
-                    <div className="flex flex-col gap-6">
-                        <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="font-display font-semibold text-xl text-ink-primary dark:text-white">Features</a>
-                        <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="font-display font-semibold text-xl text-ink-primary dark:text-white">About</a>
-                        <a href="#tools" onClick={() => setIsMobileMenuOpen(false)} className="font-display font-semibold text-xl text-primary">Explore All Tools →</a>
-
-                        <div className="h-px bg-border dark:bg-border-dark my-2" />
-
-                        {CATEGORIES.filter(c => c.id !== 'all').map(category => (
-                            <div key={category.id} className="flex flex-col gap-3">
-                                <h4 className="font-display font-bold text-lg" style={{ color: getToolsByCategory(category.id)[0]?.color }}>
-                                    {category.label}
-                                </h4>
-                                <div className="flex flex-col gap-3 pl-2 border-l-2 border-border dark:border-border-dark">
-                                    {getToolsByCategory(category.id).map(tool => (
-                                        <Link
-                                            key={tool.slug}
-                                            to={`/tool/${tool.slug}`}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className="font-body text-base text-ink-secondary dark:text-ink-muted"
-                                        >
-                                            {tool.name}
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </nav>
+                <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
+                    <IconButton onClick={toggleDarkMode} sx={{ color: theme.palette.text.primary }}>
+                        {isDark ? <Sun size={20} strokeWidth={2.5} /> : <Moon size={20} strokeWidth={2.5} />}
+                    </IconButton>
+                    <IconButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} sx={{ color: theme.palette.text.primary }}>
+                        {isMobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
+                    </IconButton>
+                </Box>
+            </Toolbar>
+        </AppBar>
     );
 }
+

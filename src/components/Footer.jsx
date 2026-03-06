@@ -1,103 +1,176 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Container, Grid, Typography, Link, IconButton, useTheme } from '@mui/material';
 import { CATEGORIES } from '../utils/tools';
+import { Twitter, Github, MessageCircle } from 'lucide-react'; // mapped social icons
 
 export default function Footer() {
+    const theme = useTheme();
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative bg-white dark:bg-bg-dark pt-20 pb-10 transition-colors duration-300 overflow-hidden">
+        <Box component="footer" sx={{
+            position: 'relative',
+            bgcolor: 'background.paper',
+            pt: { xs: 8, md: 10 },
+            pb: { xs: 4, md: 5 },
+            transition: 'background-color 0.3s',
+            overflow: 'hidden'
+        }}>
             {/* Subtle top gradient border effect */}
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border dark:via-border-dark to-transparent opacity-50"></div>
+            <Box sx={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '1px',
+                background: `linear-gradient(90deg, transparent, ${theme.palette.divider}, transparent)`,
+                opacity: 0.5
+            }} />
 
-            <div className="max-w-content mx-auto px-4 sm:px-6 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
+            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 10 }}>
+                <Grid container spacing={{ xs: 6, lg: 4 }} sx={{ mb: { xs: 8, md: 10 } }}>
 
                     {/* Brand Column */}
-                    <div className="lg:col-span-2 flex flex-col gap-6">
-                        <Link to="/" className="flex items-center gap-3 group w-fit">
-                            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-glow group-hover:-rotate-6">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
-                            </div>
-                            <span className="font-display font-extrabold text-2xl tracking-tight text-ink-primary dark:text-white">
-                                <span className="text-primary font-black">PDF</span>Kit
-                            </span>
-                        </Link>
-                        <p className="font-body text-ink-secondary dark:text-ink-muted leading-relaxed max-w-sm text-base">
-                            Every PDF tool you'll ever need. <strong>100% Free. No limits. No signup required.</strong> We believe essential document utilities should be accessible, secure, and beautiful to use.
-                        </p>
-                        <div className="flex items-center gap-4 mt-2">
-                            {/* Social mock placeholders */}
-                            {['Twitter', 'GitHub', 'Discord'].map((social, i) => (
-                                <a key={i} href="#" className="w-10 h-10 rounded-full bg-surface dark:bg-surface-dark border border-border dark:border-border-dark flex items-center justify-center text-ink-secondary hover:text-primary hover:border-primary/50 transition-all font-display text-xs font-bold">
-                                    {social.charAt(0)}
-                                </a>
-                            ))}
-                        </div>
-                    </div>
+                    <Grid item xs={12} lg={4}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', width: 'fit-content', '&:hover .logo-icon': { bgcolor: 'primary.main', color: '#fff', transform: 'rotate(-6deg)', boxShadow: `0 0 20px ${alpha(theme.palette.primary.main, 0.4)}` } }}>
+                                <Box className="logo-icon" sx={{
+                                    width: 40, height: 40, borderRadius: '16px', bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main',
+                                    transition: 'all 0.3s ease', boxShadow: theme.shadows[1]
+                                }}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
+                                </Box>
+                                <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary' }}>
+                                    <Box component="span" sx={{ color: 'primary.main', fontWeight: 900 }}>PDF</Box>Kit
+                                </Typography>
+                            </Box>
+
+                            <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7, maxWidth: 'sm' }}>
+                                Every PDF tool you'll ever need. <Box component="strong" sx={{ color: 'text.primary' }}>100% Free. No limits. No signup required.</Box> We believe essential document utilities should be accessible, secure, and beautiful to use.
+                            </Typography>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                                {[
+                                    { icon: Twitter, x: '#' },
+                                    { icon: Github, x: '#' },
+                                    { icon: MessageCircle, x: '#' }
+                                ].map((social, i) => {
+                                    const Icon = social.icon;
+                                    return (
+                                        <IconButton key={i} href={social.x} size="medium" sx={{
+                                            bgcolor: 'background.default', border: `1px solid ${theme.palette.divider}`,
+                                            color: 'text.secondary',
+                                            '&:hover': { color: 'primary.main', borderColor: alpha(theme.palette.primary.main, 0.5), bgcolor: alpha(theme.palette.primary.main, 0.05) },
+                                            transition: 'all 0.2s'
+                                        }}>
+                                            <Icon size={18} />
+                                        </IconButton>
+                                    );
+                                })}
+                            </Box>
+                        </Box>
+                    </Grid>
 
                     {/* Categories Columns */}
-                    <div className="flex flex-col gap-6">
-                        <h4 className="font-display font-bold text-lg text-ink-primary dark:text-white tracking-wide">Tools</h4>
-                        <ul className="flex flex-col gap-3">
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>Tools</Typography>
+                        <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {CATEGORIES.filter(c => c.id !== 'all').slice(0, 4).map(cat => (
-                                <li key={cat.id}>
-                                    <Link to="/" className="relative font-body font-medium text-ink-secondary dark:text-ink-muted hover:text-primary dark:hover:text-primary transition-colors group py-1 inline-block">
+                                <Box component="li" key={cat.id}>
+                                    <Link component={RouterLink} to="/" underline="none" sx={{
+                                        position: 'relative', fontWeight: 500, color: 'text.secondary', py: 0.5, display: 'inline-block',
+                                        '&:hover': { color: 'primary.main' },
+                                        '&::after': {
+                                            content: '""', position: 'absolute', bottom: 0, left: 0, width: '100%', height: '2px',
+                                            bgcolor: 'primary.main', transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s ease'
+                                        },
+                                        '&:hover::after': { transform: 'scaleX(1)' }
+                                    }}>
                                         {cat.label}
-                                        <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300"></span>
                                     </Link>
-                                </li>
+                                </Box>
                             ))}
-                        </ul>
-                    </div>
+                        </Box>
+                    </Grid>
 
-                    <div className="flex flex-col gap-6">
-                        <h4 className="font-display font-bold text-lg text-ink-primary dark:text-white tracking-wide">More Tools</h4>
-                        <ul className="flex flex-col gap-3">
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>More Tools</Typography>
+                        <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {CATEGORIES.filter(c => c.id !== 'all').slice(4).map(cat => (
-                                <li key={cat.id}>
-                                    <Link to="/" className="relative font-body font-medium text-ink-secondary dark:text-ink-muted hover:text-primary dark:hover:text-primary transition-colors group py-1 inline-block">
+                                <Box component="li" key={cat.id}>
+                                    <Link component={RouterLink} to="/" underline="none" sx={{
+                                        position: 'relative', fontWeight: 500, color: 'text.secondary', py: 0.5, display: 'inline-block',
+                                        '&:hover': { color: 'primary.main' },
+                                        '&::after': {
+                                            content: '""', position: 'absolute', bottom: 0, left: 0, width: '100%', height: '2px',
+                                            bgcolor: 'primary.main', transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s ease'
+                                        },
+                                        '&:hover::after': { transform: 'scaleX(1)' }
+                                    }}>
                                         {cat.label}
-                                        <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300"></span>
                                     </Link>
-                                </li>
+                                </Box>
                             ))}
-                        </ul>
-                    </div>
+                        </Box>
+                    </Grid>
 
                     {/* Legal / Company */}
-                    <div className="flex flex-col gap-6">
-                        <h4 className="font-display font-bold text-lg text-ink-primary dark:text-white tracking-wide">Legal</h4>
-                        <ul className="flex flex-col gap-3">
-                            {['Privacy Policy', 'Terms of Service', 'About Us', 'Contact'].map((link, i) => (
-                                <li key={i}>
-                                    <Link to="/" className="relative font-body font-medium text-ink-secondary dark:text-ink-muted hover:text-primary dark:hover:text-primary transition-colors group py-1 inline-block">
-                                        {link}
-                                        <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <Grid item xs={12} sm={6} md={4} lg={2}>
+                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>Legal</Typography>
+                        <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                            {['Privacy Policy', 'Terms of Service', 'About Us', 'Contact'].map((item, i) => (
+                                <Box component="li" key={i}>
+                                    <Link component={RouterLink} to="/" underline="none" sx={{
+                                        position: 'relative', fontWeight: 500, color: 'text.secondary', py: 0.5, display: 'inline-block',
+                                        '&:hover': { color: 'primary.main' },
+                                        '&::after': {
+                                            content: '""', position: 'absolute', bottom: 0, left: 0, width: '100%', height: '2px',
+                                            bgcolor: 'primary.main', transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s ease'
+                                        },
+                                        '&:hover::after': { transform: 'scaleX(1)' }
+                                    }}>
+                                        {item}
                                     </Link>
-                                </li>
+                                </Box>
                             ))}
-                        </ul>
-                    </div>
+                        </Box>
+                    </Grid>
 
-                </div>
+                </Grid>
 
                 {/* Bottom Bar */}
-                <div className="pt-8 border-t border-border/50 dark:border-border-dark/50 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <p className="font-body text-[15px] font-medium text-ink-muted">
-                        © {currentYear} <span className="text-ink-primary dark:text-white font-bold">PDFKit</span>. All rights reserved.
-                    </p>
+                <Box sx={{
+                    pt: 4, borderTop: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+                    display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'space-between', gap: 3
+                }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.secondary' }}>
+                        © {currentYear} <Box component="span" sx={{ color: 'text.primary', fontWeight: 700 }}>PDFKit</Box>. All rights reserved.
+                    </Typography>
 
-                    <div className="flex items-center gap-6">
-                        <span className="font-display text-sm font-bold tracking-wide uppercase px-4 py-1.5 rounded-full bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400 border border-green-500/20 shadow-sm">
-                            Always Free
-                        </span>
-                    </div>
-                </div>
-
-            </div>
+                    <Typography variant="caption" sx={{
+                        fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', px: 2, py: 0.5,
+                        borderRadius: '99px', bgcolor: alpha(theme.palette.success.main, 0.1), color: theme.palette.success.main,
+                        border: `1px solid ${alpha(theme.palette.success.main, 0.2)}`
+                    }}>
+                        Always Free
+                    </Typography>
+                </Box>
+            </Container>
 
             {/* Background decorative blob */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full mix-blend-multiply filter blur-[100px] pointer-events-none -z-10"></div>
-        </footer>
+            <Box sx={{
+                position: 'absolute', top: 0, right: 0, width: 400, height: 400,
+                bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: '50%',
+                mixBlendMode: 'multiply', filter: 'blur(100px)', zIndex: 0, pointerEvents: 'none'
+            }} />
+        </Box>
     );
+}
+
+function alpha(color, opacity) {
+    if (!color) return `rgba(226, 87, 76, ${opacity})`;
+    if (color.startsWith('#')) {
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+    return color.replace(')', `, ${opacity})`).replace('rgb', 'rgba');
 }

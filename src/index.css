@@ -1,10 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-bg text-ink-primary font-body antialiased;
+    @apply font-body antialiased;
+
+    /* Custom clean scrollbar */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply bg-ink-muted/30 rounded-full border-[3px] border-transparent bg-clip-padding;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      @apply bg-ink-muted/50;
+    }
+  }
+
+  .dark body::-webkit-scrollbar-thumb {
+    @apply bg-white/10;
+  }
+
+  .dark body::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
   }
 
   h1,
@@ -13,6 +40,43 @@
   h4,
   h5,
   h6 {
-    @apply font-display text-ink-primary;
+    @apply font-display text-ink-primary tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  .dark ::selection {
+    @apply bg-primary/40 text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface-glass backdrop-blur-xl border border-border-glass shadow-glass;
+  }
+
+  .glass-dark {
+    @apply bg-surface-glassDark backdrop-blur-xl border border-border-glassDark shadow-glass-dark;
+  }
+
+  /* Mesh gradients for modern backgrounds */
+  .bg-mesh-light {
+    background-color: #f8fafc;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(356, 86%, 85%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(220, 100%, 88%, 1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(40, 100%, 88%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(280, 100%, 88%, 1) 0px, transparent 50%);
+  }
+
+  .bg-mesh-dark {
+    background-color: #11111b;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(356, 86%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(220, 100%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(40, 100%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(280, 100%, 15%, 1) 0px, transparent 50%);
   }
 }

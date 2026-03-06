@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
+import { Box, Typography, Button, Container, Card, CircularProgress, TextField, InputAdornment, useTheme, Alert } from '@mui/material';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useFileUpload } from '../hooks/useFileUpload';
 import { getToolBySlug } from '../utils/tools';
 import DropzoneArea from '../components/DropzoneArea';
@@ -10,7 +12,20 @@ const DynamicIcon = ({ name, color, size = 24, className = "" }) => {
     return <Icon size={size} color={color} className={className} />;
 };
 
+const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    in: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+    out: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+};
+
+const stateVariants = {
+    initial: { opacity: 0, scale: 0.95 },
+    animate: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 25 } },
+    exit: { opacity: 0, scale: 1.05, transition: { duration: 0.2 } }
+};
+
 export default function ToolPage() {
+    const theme = useTheme();
     const { toolSlug } = useParams();
     const tool = getToolBySlug(toolSlug);
 
@@ -19,7 +34,6 @@ export default function ToolPage() {
 
     const {
         appState,
-        setAppState,
         progress,
         resultUrl,
         errorMsg,
@@ -43,7 +57,7 @@ export default function ToolPage() {
         if (resultUrl) {
             const link = document.createElement('a');
             link.href = resultUrl;
-            link.setAttribute('download', `${toolSlug}-result`);
+            link.setAttribute('download', `${toolSlug}-result.pdf`); // ensure suffix matches type or dynamically handled
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -58,76 +72,81 @@ export default function ToolPage() {
 
     if (!tool) {
         return (
-            <div className="flex-1 flex items-center justify-center p-6 bg-bg dark:bg-bg-dark">
-                <div className="text-center glass dark:glass-dark p-12 rounded-[32px] max-w-lg w-full">
-                    <LucideIcons.AlertTriangle size={48} className="mx-auto text-orange-500 mb-6" />
-                    <h2 className="text-3xl font-display font-bold text-ink-primary dark:text-white mb-4">Tool Not Found</h2>
-                    <p className="text-ink-secondary dark:text-ink-muted font-body mb-8">The tool you are looking for doesn't exist or has been moved.</p>
-                    <Link to="/" className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-btn font-display font-semibold shadow-btn-red hover:shadow-glow hover:-translate-y-0.5 transition-all">
-                        <LucideIcons.ArrowLeft size={18} /> Back to Home
-                    </Link>
-                </div>
-            </div>
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', p: 3, bgcolor: 'background.default', minHeight: '100vh' }}>
+                <Card sx={{ p: 6, borderRadius: '32px', maxWidth: '500px', width: '100%', textAlign: 'center', boxShadow: theme.shadows[4] }}>
+                    <LucideIcons.AlertTriangle size={48} color={theme.palette.warning.main} style={{ margin: '0 auto', marginBottom: '24px' }} />
+                    <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>Tool Not Found</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4 }}>The tool you are looking for doesn't exist or has been moved.</Typography>
+                    <Button component={Link} to="/" variant="contained" size="large" startIcon={<LucideIcons.ArrowLeft size={18} />} sx={{ borderRadius: '12px', fontWeight: 700 }}>
+                        Back to Home
+                    </Button>
+                </Card>
+            </Box>
         );
     }
 
     return (
-        <div className="flex flex-col w-full min-h-screen bg-bg dark:bg-bg-dark relative overflow-hidden">
-
+        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '100vh', bgcolor: 'background.default', position: 'relative', overflow: 'hidden' }}>
             {/* Ambient Background Glows */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full mix-blend-multiply filter blur-[150px] opacity-70 animate-blob pointer-events-none"></div>
-            <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-purple-500/10 rounded-full mix-blend-multiply filter blur-[150px] opacity-70 animate-blob animate-delay-2000 pointer-events-none"></div>
+            <Box sx={{ position: 'absolute', top: 0, right: 0, width: 500, height: 500, bgcolor: alpha(theme.palette.primary.main, 0.1), borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
+            <Box sx={{ position: 'absolute', top: '20%', left: '-10%', width: 400, height: 400, bgcolor: 'rgba(168, 85, 247, 0.1)', borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
 
-            <main className="flex-1 w-full max-w-content mx-auto px-4 sm:px-6 py-32 relative z-10 flex flex-col items-center">
+            <Container maxWidth="md" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', py: { xs: 8, md: 12 }, position: 'relative', zIndex: 10 }}>
 
-                <Link to="/" className="self-start mb-8 text-ink-secondary dark:text-ink-muted hover:text-primary dark:hover:text-primary transition-colors flex items-center gap-2 font-display font-medium text-sm group">
-                    <LucideIcons.ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    Back to All Tools
-                </Link>
+                <Box component={Link} to="/" sx={{ alignSelf: 'flex-start', mb: 6, color: 'text.secondary', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1, fontWeight: 600, '&:hover': { color: 'primary.main' }, transition: 'color 0.2s' }}>
+                    <LucideIcons.ArrowLeft size={16} /> Back to All Tools
+                </Box>
 
-                <div className="text-center mb-12 animate-fade-down w-full">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-[24px] mb-6 shadow-sm border border-white/50 dark:border-white/10 glass dark:glass-dark rotate-3 hover:rotate-0 transition-transform duration-500" style={{ backgroundColor: `${tool.color}15`, color: tool.color }}>
+                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} style={{ width: '100%', textAlign: 'center', marginBottom: '48px' }}>
+                    <Box sx={{
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 80, height: 80, borderRadius: '24px', mb: 3,
+                        bgcolor: `${tool.color}15`, color: tool.color, boxShadow: theme.shadows[1], border: `1px solid ${theme.palette.divider}`
+                    }}>
                         <DynamicIcon name={tool.icon} size={40} />
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-display font-bold text-ink-primary dark:text-white mb-6">
+                    </Box>
+                    <Typography variant="h2" sx={{ fontWeight: 800, mb: 2, color: 'text.primary' }}>
                         {tool.name}
-                    </h1>
-                    <p className="text-lg font-body text-ink-secondary dark:text-ink-muted max-w-2xl mx-auto">
+                    </Typography>
+                    <Typography variant="h6" sx={{ color: 'text.secondary', maxWidth: '600px', mx: 'auto', fontWeight: 400 }}>
                         {tool.desc}
-                    </p>
-                </div>
+                    </Typography>
+                </motion.div>
 
-                <div className="w-full max-w-upload mx-auto animate-fade-up style={{animationDelay: '0.1s'}}">
-                    <div className="glass dark:glass-dark rounded-[32px] p-8 md:p-12 shadow-glass dark:shadow-glass-dark border border-white/50 dark:border-white/10 relative overflow-hidden group">
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.6 }} style={{ width: '100%', maxWidth: '800px' }}>
+                    <Card sx={{
+                        borderRadius: '32px', p: { xs: 4, md: 6 },
+                        position: 'relative', overflow: 'hidden',
+                        boxShadow: `0 20px 40px -10px ${alpha(theme.palette.common.black, theme.palette.mode === 'light' ? 0.05 : 0.2)}`,
+                        border: `1px solid ${theme.palette.divider}`
+                    }}>
+                        <AnimatePresence mode="wait">
+                            {(status === 'idle' || status === 'error') && (
+                                <motion.div key="upload" variants={stateVariants} initial="initial" animate="animate" exit="exit" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
-                        {/* Shimmer effect backgound */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 dark:via-white/2 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
-
-                        <div className="relative z-10">
-                            {status === 'idle' || status === 'error' ? (
-                                <div className="space-y-8">
-                                    {isUrlSupported ? (
-                                        <div className="space-y-6">
-                                            <div className="relative group/input">
-                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-ink-muted group-focus-within/input:text-primary transition-colors">
-                                                    <LucideIcons.LinkIcon size={20} />
-                                                </div>
-                                                <input
-                                                    type="url"
-                                                    value={url}
-                                                    onChange={(e) => setUrl(e.target.value)}
-                                                    placeholder="Enter website URL (e.g., https://example.com)"
-                                                    className="block w-full pl-12 pr-4 py-4 border-2 border-border/50 dark:border-border-dark/50 rounded-2xl bg-white/50 dark:bg-surface-dark/50 text-ink-primary dark:text-white placeholder-ink-muted focus:ring-0 focus:border-primary focus:bg-white dark:focus:bg-surface-dark transition-all duration-300 shadow-sm font-body"
-                                                />
-                                                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-focus-within/input:border-primary/20 pointer-events-none transition-colors duration-300"></div>
-                                            </div>
-                                            <div className="flex items-center gap-4">
-                                                <div className="h-px bg-border/50 dark:bg-border-dark/50 flex-1"></div>
-                                                <span className="text-sm font-display font-semibold text-ink-muted uppercase tracking-wider">OR</span>
-                                                <div className="h-px bg-border/50 dark:bg-border-dark/50 flex-1"></div>
-                                            </div>
-                                        </div>
-                                    ) : null}
+                                    {isUrlSupported && (
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                            <TextField
+                                                fullWidth
+                                                variant="outlined"
+                                                placeholder="Enter website URL (e.g., https://example.com)"
+                                                value={url}
+                                                onChange={(e) => setUrl(e.target.value)}
+                                                InputProps={{
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                            <LucideIcons.LinkIcon size={20} color={theme.palette.text.secondary} />
+                                                        </InputAdornment>
+                                                    ),
+                                                    sx: { borderRadius: '16px', bgcolor: 'background.default' }
+                                                }}
+                                            />
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider' }} />
+                                                <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1 }}>OR</Typography>
+                                                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider' }} />
+                                            </Box>
+                                        </Box>
+                                    )}
 
                                     <DropzoneArea
                                         onFileSelect={setFile}
@@ -138,97 +157,106 @@ export default function ToolPage() {
                                         hasUrl={!!url}
                                     />
 
-                                    {error && (
-                                        <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 rounded-2xl animate-shake">
-                                            <LucideIcons.AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                                            <p className="text-sm font-medium">{error}</p>
-                                        </div>
-                                    )}
+                                    <AnimatePresence>
+                                        {error && (
+                                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+                                                <Alert severity="error" sx={{ borderRadius: '16px', mt: 2 }} icon={<LucideIcons.AlertCircle size={24} />}>
+                                                    {error}
+                                                </Alert>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
 
-                                    <button
+                                    <Button
                                         onClick={handleProcess}
                                         disabled={(!file && !url) || (isUrlSupported && !url && !file)}
-                                        className={`w-full py-4 rounded-btn font-display font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 ${(file || url)
-                                            ? 'bg-primary text-white shadow-btn-red hover:shadow-glow hover:-translate-y-1'
-                                            : 'bg-ink-muted/20 text-ink-muted cursor-not-allowed border border-border/50 dark:border-border-dark/50'
-                                            }`}
+                                        variant="contained"
+                                        size="large"
+                                        endIcon={<LucideIcons.ArrowRight size={20} />}
+                                        sx={{
+                                            py: 2, borderRadius: '16px', fontSize: '1.1rem', fontWeight: 700,
+                                            boxShadow: (file || url) ? `0 10px 20px -10px ${theme.palette.primary.main}` : 'none'
+                                        }}
                                     >
-                                        Process File <LucideIcons.ArrowRight size={20} />
-                                    </button>
-                                </div>
-                            ) : status === 'processing' ? (
-                                <div className="py-12 flex flex-col items-center justify-center space-y-8 animate-fade-in">
-                                    <div className="relative w-32 h-32 flex items-center justify-center">
-                                        {/* Outer glowing ring */}
-                                        <div className="absolute inset-0 rounded-full border-[6px] border-primary/20 blur-[2px]"></div>
+                                        Process File
+                                    </Button>
+                                </motion.div>
+                            )}
 
-                                        <svg className="absolute inset-0 w-full h-full -rotate-90 drop-shadow-md">
-                                            <circle
-                                                className="text-border dark:text-border-dark transition-colors"
-                                                strokeWidth="6"
-                                                stroke="currentColor"
-                                                fill="transparent"
-                                                r="58"
-                                                cx="64"
-                                                cy="64"
-                                            />
-                                            <circle
-                                                className="text-primary transition-all duration-300 ease-out"
-                                                strokeWidth="6"
-                                                strokeDasharray={364.4}
-                                                strokeDashoffset={364.4 - (progress / 100) * 364.4}
-                                                strokeLinecap="round"
-                                                stroke="currentColor"
-                                                fill="transparent"
-                                                r="58"
-                                                cx="64"
-                                                cy="64"
-                                            />
-                                        </svg>
-                                        <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                            <span className="text-3xl font-display font-black text-ink-primary dark:text-white mb-1">
-                                                {progress}%
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <h3 className="text-xl font-display font-bold text-ink-primary dark:text-white mb-2">Processing Document...</h3>
-                                        <p className="text-ink-secondary dark:text-ink-muted font-body">This usually takes a few seconds. Please don't close this tab.</p>
-                                    </div>
-                                </div>
-                            ) : status === 'success' ? (
-                                <div className="py-8 flex flex-col items-center text-center space-y-8 animate-bounce-in">
-                                    <div className="w-24 h-24 bg-green-500/10 rounded-[32px] flex items-center justify-center text-green-500 mb-2 rotate-3 shadow-sm border border-green-500/20 relative">
-                                        <div className="absolute inset-0 rounded-[32px] bg-green-500/20 blur-xl animate-pulse"></div>
-                                        <LucideIcons.CheckCircle size={48} strokeWidth={2.5} className="relative z-10" />
-                                    </div>
+                            {status === 'processing' && (
+                                <motion.div key="processing" variants={stateVariants} initial="initial" animate="animate" exit="exit">
+                                    <Box sx={{ py: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                                        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                                            <CircularProgress variant="determinate" value={100} size={140} thickness={3} sx={{ color: theme.palette.divider }} />
+                                            <CircularProgress variant="determinate" value={progress} size={140} thickness={3} sx={{ color: theme.palette.primary.main, position: 'absolute', left: 0 }} />
+                                            <Box sx={{ top: 0, left: 0, bottom: 0, right: 0, position: 'absolute', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Typography variant="h4" component="div" color="text.primary" sx={{ fontWeight: 900 }}>
+                                                    {Math.round(progress)}%
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                        <Box sx={{ textAlign: 'center' }}>
+                                            <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: 'text.primary' }}>Processing Document...</Typography>
+                                            <Typography variant="body1" sx={{ color: 'text.secondary' }}>This usually takes a few seconds. Please don't close this tab.</Typography>
+                                        </Box>
+                                    </Box>
+                                </motion.div>
+                            )}
 
-                                    <div>
-                                        <h3 className="text-3xl font-display font-bold text-ink-primary dark:text-white mb-3">Task Complete!</h3>
-                                        <p className="text-ink-secondary dark:text-ink-muted font-body text-lg">Your file has been successfully processed.</p>
-                                    </div>
-
-                                    <div className="flex flex-col sm:flex-row gap-4 w-full pt-4">
-                                        <a
-                                            href={resultUrl}
-                                            download
-                                            className="flex-1 py-4 px-6 rounded-btn font-display font-bold text-lg bg-green-500 text-white shadow-[0_8px_16px_rgba(34,197,94,0.25)] hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
-                                        >
-                                            <LucideIcons.Download size={22} /> Download Result
-                                        </a>
-                                        <button
-                                            onClick={handleReset}
-                                            className="flex-1 py-4 px-6 rounded-btn font-display font-bold text-lg bg-white/50 dark:bg-surface-dark/50 backdrop-blur-md text-ink-primary dark:text-white border border-border dark:border-border-dark hover:border-primary/50 hover:text-primary dark:hover:border-primary/50 dark:hover:text-primary transition-colors flex items-center justify-center gap-2"
-                                        >
-                                            Start Over
-                                        </button>
-                                    </div>
-                                </div>
-                            ) : null}
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+                            {status === 'success' && (
+                                <motion.div key="success" variants={stateVariants} initial="initial" animate="animate" exit="exit">
+                                    <Box sx={{ py: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 4 }}>
+                                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1, rotate: [0, 10, -10, 0] }} transition={{ type: 'spring', stiffness: 200, damping: 15 }}>
+                                            <Box sx={{
+                                                width: 96, height: 96, borderRadius: '32px', bgcolor: alpha(theme.palette.success.main, 0.1),
+                                                color: theme.palette.success.main, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                border: `1px solid ${alpha(theme.palette.success.main, 0.2)}`, flexShrink: 0
+                                            }}>
+                                                <LucideIcons.CheckCircle size={48} strokeWidth={2.5} />
+                                            </Box>
+                                        </motion.div>
+                                        <Box>
+                                            <Typography variant="h4" sx={{ fontWeight: 800, mb: 1, color: 'text.primary' }}>Task Complete!</Typography>
+                                            <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '1.1rem' }}>Your file has been successfully processed.</Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, width: '100%', mt: 2 }}>
+                                            <Button
+                                                onClick={handleDownload}
+                                                variant="contained"
+                                                color="success"
+                                                size="large"
+                                                startIcon={<LucideIcons.Download size={22} />}
+                                                sx={{ flex: 1, py: 2, borderRadius: '16px', fontSize: '1.1rem', fontWeight: 700, boxShadow: `0 10px 20px -10px ${theme.palette.success.main}` }}
+                                            >
+                                                Download Result
+                                            </Button>
+                                            <Button
+                                                onClick={handleReset}
+                                                variant="outlined"
+                                                size="large"
+                                                sx={{ flex: 1, py: 2, borderRadius: '16px', fontSize: '1.1rem', fontWeight: 700, borderColor: theme.palette.divider, color: theme.palette.text.primary, '&:hover': { borderColor: theme.palette.primary.main } }}
+                                            >
+                                                Start Over
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </Card>
+                </motion.div>
+            </Container>
+        </Box>
     );
+}
+
+function alpha(color, opacity) {
+    if (!color) return `rgba(226, 87, 76, ${opacity})`;
+    if (color.startsWith('#')) {
+        let r = parseInt(color.slice(1, 3), 16),
+            g = parseInt(color.slice(3, 5), 16),
+            b = parseInt(color.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+    return color.replace(')', `, ${opacity})`).replace('rgb', 'rgba');
 }
