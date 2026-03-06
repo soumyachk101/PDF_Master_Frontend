@@ -67,7 +67,21 @@ export function useFileUpload(toolSlug) {
         } catch (error) {
             console.error('File processing error:', error);
             setAppState('error');
-            setErrorMsg(error.response?.data?.error?.message || 'An error occurred during file processing.');
+
+            // When responseType is 'blob', error.response.data is a Blob — parse it
+            let message = 'An error occurred during file processing.';
+            if (error.response?.data instanceof Blob) {
+                try {
+                    const text = await error.response.data.text();
+                    const json = JSON.parse(text);
+                    message = json?.error?.message || json?.message || message;
+                } catch (_) { /* ignore parse errors */ }
+            } else if (error.response?.data?.error?.message) {
+                message = error.response.data.error.message;
+            } else if (!error.response) {
+                message = 'Cannot reach the server. Make sure the backend is running.';
+            }
+            setErrorMsg(message);
         }
     }, [toolSlug]);
 
