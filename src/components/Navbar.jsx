@@ -30,10 +30,12 @@ export default function Navbar() {
             <div className="max-w-content mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
 
                 {/* Logo Left */}
-                <Link to="/" className="flex items-center gap-2 group">
-                    <div className="w-8 h-8 rounded-icon bg-primary-light flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                        <FileText size={20} strokeWidth={2.5} />
-                    </div>
+                <Link to="/" className="flex items-center gap-3 group">
+                    <img
+                        src="/logo.png"
+                        alt="PDFKit Logo"
+                        className="w-10 h-10 object-contain group-hover:scale-105 transition-transform"
+                    />
                     <span className="font-display font-bold text-xl tracking-tight text-ink-primary dark:text-white">
                         <span className="text-primary">PDF</span>Kit
                     </span>
