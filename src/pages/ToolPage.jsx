@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
 import { useFileUpload } from '../hooks/useFileUpload';
@@ -12,18 +13,48 @@ const DynamicIcon = ({ name, color, size = 24, className = "" }) => {
 export default function ToolPage() {
     const { toolSlug } = useParams();
     const tool = getToolBySlug(toolSlug);
+
+    const [file, setFile] = useState(null);
+    const [url, setUrl] = useState('');
+
     const {
-        file,
-        setFile,
-        url,
-        setUrl,
+        appState,
+        setAppState,
         progress,
-        status,
-        error,
         resultUrl,
-        handleProcess,
-        reset
+        errorMsg,
+        resetState,
+        processFiles
     } = useFileUpload(toolSlug);
+
+    const isUrlSupported = tool?.type === 'html' || tool?.urlSupported || false;
+    const status = appState === 'upload' ? 'idle' : appState;
+    const error = errorMsg;
+
+    const handleProcess = () => {
+        if (file) {
+            processFiles([file], url ? { url } : {});
+        } else if (url) {
+            processFiles([], { url });
+        }
+    };
+
+    const handleDownload = () => {
+        if (resultUrl) {
+            const link = document.createElement('a');
+            link.href = resultUrl;
+            link.setAttribute('download', `${toolSlug}-result`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    };
+
+    const handleReset = () => {
+        setFile(null);
+        setUrl('');
+        resetState();
+    };
 
     if (!tool) {
         return (
@@ -39,8 +70,6 @@ export default function ToolPage() {
             </div>
         );
     }
-
-    const isUrlSupported = tool.slug === 'html-to-pdf';
 
     return (
         <div className="flex flex-col w-full min-h-screen bg-bg dark:bg-bg-dark relative overflow-hidden">
@@ -188,7 +217,7 @@ export default function ToolPage() {
                                             <LucideIcons.Download size={22} /> Download Result
                                         </a>
                                         <button
-                                            onClick={reset}
+                                            onClick={handleReset}
                                             className="flex-1 py-4 px-6 rounded-btn font-display font-bold text-lg bg-white/50 dark:bg-surface-dark/50 backdrop-blur-md text-ink-primary dark:text-white border border-border dark:border-border-dark hover:border-primary/50 hover:text-primary dark:hover:border-primary/50 dark:hover:text-primary transition-colors flex items-center justify-center gap-2"
                                         >
                                             Start Over
