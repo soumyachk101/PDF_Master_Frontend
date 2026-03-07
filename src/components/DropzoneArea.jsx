@@ -58,9 +58,10 @@ export default function DropzoneArea({ onFileSelect, accept, maxSize, selectedFi
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: (!selectedFiles || selectedFiles.length === 0) ? 'center' : 'stretch',
+                    justifyContent: (!selectedFiles || selectedFiles.length === 0) ? 'center' : 'flex-start',
                     minHeight: '280px',
+                    height: '100%',
                     boxShadow: isDragActive
                         ? `0 0 0 4px ${alpha(theme.palette.primary.main, 0.15)}, 0 20px 40px -10px ${alpha(theme.palette.primary.main, 0.2)}`
                         : '0 4px 20px rgba(0,0,0,0.02)',

@@ -37,6 +37,7 @@ export default function ToolPage() {
         appState,
         progress,
         resultUrl,
+        resultFilename,
         errorMsg,
         resetState,
         processFiles
@@ -63,7 +64,7 @@ export default function ToolPage() {
         if (resultUrl) {
             const link = document.createElement('a');
             link.href = resultUrl;
-            link.setAttribute('download', `${toolSlug}-result${tool.outputExt || '.pdf'}`);
+            link.setAttribute('download', resultFilename || `${toolSlug}-result${tool.outputExt || '.pdf'}`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

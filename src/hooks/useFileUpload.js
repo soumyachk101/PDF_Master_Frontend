@@ -7,12 +7,14 @@ export function useFileUpload(toolSlug) {
     const [appState, setAppState] = useState('upload'); // 'upload' | 'processing' | 'success' | 'error'
     const [progress, setProgress] = useState(0);
     const [resultUrl, setResultUrl] = useState(null);
+    const [resultFilename, setResultFilename] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
 
     const resetState = useCallback(() => {
         setAppState('upload');
         setProgress(0);
         setResultUrl(null);
+        setResultFilename(null);
         setErrorMsg('');
     }, []);
 
@@ -59,11 +61,25 @@ export function useFileUpload(toolSlug) {
             clearInterval(fakeProgress);
             setProgress(100);
 
+            // Extract filename from Content-Disposition header if available
+            let filename = `${toolSlug}-result${tool?.outputExt || '.pdf'}`;
+            const contentDisposition = response.headers['content-disposition'];
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+                if (filenameMatch && filenameMatch.length === 2) {
+                    filename = filenameMatch[1];
+                }
+            }
+            
+            // Extract the actual mime type sent by the backend
+            const contentType = response.headers['content-type'] || tool?.outputMime || 'application/pdf';
+
             // Create ObjectURL for the download
-            const blob = new Blob([response.data], { type: tool?.outputMime || 'application/pdf' });
+            const blob = new Blob([response.data], { type: contentType });
             const downloadUrl = window.URL.createObjectURL(blob);
 
             setResultUrl(downloadUrl);
+            setResultFilename(filename);
             setAppState('success');
 
         } catch (error) {
@@ -92,6 +108,7 @@ export function useFileUpload(toolSlug) {
         setAppState,
         progress,
         resultUrl,
+        resultFilename,
         errorMsg,
         resetState,
         processFiles
