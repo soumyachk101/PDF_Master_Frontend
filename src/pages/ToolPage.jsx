@@ -3,6 +3,7 @@ import * as LucideIcons from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
 import { Box, Typography, Button, Container, Card, CircularProgress, TextField, InputAdornment, useTheme, Alert } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { useFileUpload } from '../hooks/useFileUpload';
 import { getToolBySlug } from '../utils/tools';
 import DropzoneArea from '../components/DropzoneArea';
@@ -99,6 +100,12 @@ export default function ToolPage() {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '100vh', bgcolor: 'background.default', position: 'relative', overflow: 'hidden' }}>
+            <Helmet>
+                <title>{tool.seoTitle || `${tool.name} – Free Online PDF Tool`}</title>
+                <meta name="description" content={tool.seoDesc || tool.desc} />
+                {(tool.seoKeywords) && <meta name="keywords" content={tool.seoKeywords} />}
+                <link rel="canonical" href={`https://pdfkit.fun/tool/${tool.slug}`} />
+            </Helmet>
             <Box sx={{ position: 'absolute', top: 0, right: 0, width: 500, height: 500, bgcolor: alpha(theme.palette.primary.main, 0.1), borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
             <Box sx={{ position: 'absolute', top: '20%', left: '-10%', width: 400, height: 400, bgcolor: 'rgba(168, 85, 247, 0.1)', borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
 
@@ -276,6 +283,35 @@ export default function ToolPage() {
                         </AnimatePresence>
                     </Card>
                 </motion.div>
+
+                {/* SEO Rich Content Section */}
+                <Box sx={{ mt: 10, mb: 4, width: '100%', maxWidth: '800px', textAlign: 'left' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 800, mb: 3, color: 'text.primary' }}>How to {tool.name}</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.secondary', mb: 5, lineHeight: 1.8, fontSize: '1.1rem' }}>
+                        {tool.seoArticle || `Use our free online tool to ${tool.name.toLowerCase()} instantly. Upload your file above and let our secure servers do the heavy lifting. No installation required.`}
+                    </Typography>
+
+                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: 'text.primary' }}>Why use PDFKit?</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.secondary', mb: 5, lineHeight: 1.8, fontSize: '1.1rem' }}>
+                        <strong>100% Private & Secure:</strong> We take your privacy seriously. Files are never stored permanently, ensuring your data remains completely secure. No account or email required to use our tools.
+                        <br/><br/>
+                        <strong>Blazing Fast:</strong> Forget heavy desktop software. Process your documents in absolute seconds directly from your browser with zero bloatware.
+                    </Typography>
+
+                    {tool.faqs && tool.faqs.length > 0 && (
+                        <Box sx={{ mt: 2 }}>
+                            <Typography variant="h5" sx={{ fontWeight: 700, mb: 4, color: 'text.primary' }}>Frequently Asked Questions</Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                {tool.faqs.map((faq, i) => (
+                                    <Box key={i} sx={{ p: 3, bgcolor: alpha(theme.palette.divider, 0.05), border: `1px solid ${theme.palette.divider}`, borderRadius: '16px' }}>
+                                        <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem', mb: 1, color: 'text.primary' }}>{faq.q}</Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6, fontSize: '1.05rem' }}>{faq.a}</Typography>
+                                    </Box>
+                                ))}
+                            </Box>
+                        </Box>
+                    )}
+                </Box>
             </Container>
         </Box>
     );
