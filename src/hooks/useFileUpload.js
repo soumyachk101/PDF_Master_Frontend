@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
+import { getToolBySlug } from '../utils/tools';
 
 export function useFileUpload(toolSlug) {
+    const tool = getToolBySlug(toolSlug);
     const [appState, setAppState] = useState('upload'); // 'upload' | 'processing' | 'success' | 'error'
     const [progress, setProgress] = useState(0);
     const [resultUrl, setResultUrl] = useState(null);
@@ -58,7 +60,7 @@ export function useFileUpload(toolSlug) {
             setProgress(100);
 
             // Create ObjectURL for the download
-            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const blob = new Blob([response.data], { type: tool?.outputMime || 'application/pdf' });
             const downloadUrl = window.URL.createObjectURL(blob);
 
             setResultUrl(downloadUrl);

@@ -1,21 +1,5 @@
 import { createTheme } from '@mui/material/styles';
 
-const glassStyles = {
-    background: 'rgba(255, 255, 255, 0.45)',
-    backdropFilter: 'blur(24px)',
-    WebkitBackdropFilter: 'blur(24px)',
-    border: '1px solid rgba(255, 255, 255, 0.5)',
-    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.05)',
-};
-
-const darkGlassStyles = {
-    background: 'rgba(20, 20, 30, 0.55)',
-    backdropFilter: 'blur(24px)',
-    WebkitBackdropFilter: 'blur(24px)',
-    border: '1px solid rgba(255, 255, 255, 0.06)',
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
-};
-
 // Skeuomorphic design tokens
 const getSkeuomorphicTokens = (mode) => ({
     palette: {
