@@ -29,8 +29,9 @@ export default function ToolPage() {
     const { toolSlug } = useParams();
     const tool = getToolBySlug(toolSlug);
 
-    const [file, setFile] = useState(null);
+    const [files, setFiles] = useState([]);
     const [url, setUrl] = useState('');
+    const [params, setParams] = useState({});
 
     const {
         appState,
@@ -41,15 +42,20 @@ export default function ToolPage() {
         processFiles
     } = useFileUpload(toolSlug);
 
-    const isUrlSupported = tool?.type === 'html' || tool?.urlSupported || false;
+    const isUrlSupported = tool?.type === 'html' || tool?.urlInput || false;
     const status = appState === 'upload' ? 'idle' : appState;
     const error = errorMsg;
 
     const handleProcess = () => {
-        if (file) {
-            processFiles([file], url ? { url } : {});
+        let submissionParams = { ...params };
+        if (url && isUrlSupported) {
+            submissionParams.url = url;
+        }
+
+        if (files.length > 0) {
+            processFiles(files, submissionParams);
         } else if (url) {
-            processFiles([], { url });
+            processFiles([], submissionParams);
         }
     };
 
@@ -57,7 +63,7 @@ export default function ToolPage() {
         if (resultUrl) {
             const link = document.createElement('a');
             link.href = resultUrl;
-            link.setAttribute('download', `${toolSlug}-result.pdf`); // ensure suffix matches type or dynamically handled
+            link.setAttribute('download', `${toolSlug}-result${tool.outputExt || '.pdf'}`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -65,9 +71,14 @@ export default function ToolPage() {
     };
 
     const handleReset = () => {
-        setFile(null);
+        setFiles([]);
         setUrl('');
+        setParams({});
         resetState();
+    };
+
+    const handleParamChange = (key, value) => {
+        setParams(prev => ({ ...prev, [key]: value }));
     };
 
     if (!tool) {
@@ -87,7 +98,6 @@ export default function ToolPage() {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '100vh', bgcolor: 'background.default', position: 'relative', overflow: 'hidden' }}>
-            {/* Ambient Background Glows */}
             <Box sx={{ position: 'absolute', top: 0, right: 0, width: 500, height: 500, bgcolor: alpha(theme.palette.primary.main, 0.1), borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
             <Box sx={{ position: 'absolute', top: '20%', left: '-10%', width: 400, height: 400, bgcolor: 'rgba(168, 85, 247, 0.1)', borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
 
@@ -149,13 +159,34 @@ export default function ToolPage() {
                                     )}
 
                                     <DropzoneArea
-                                        onFileSelect={setFile}
+                                        onFileSelect={setFiles}
                                         accept={tool.accept}
-                                        maxSize={tool.maxSize}
-                                        selectedFile={file}
+                                        maxSize={100 * 1024 * 1024} // 100MB
+                                        selectedFiles={files}
                                         isUrlSupported={isUrlSupported}
                                         hasUrl={!!url}
+                                        multiple={tool.multiple}
                                     />
+
+                                    {/* Additional Tool Parameters */}
+                                    {files.length > 0 && toolSlug === 'split-pdf' && (
+                                        <TextField fullWidth label="Page Ranges (e.g., 1-3,5)" variant="outlined" value={params.ranges || ''} onChange={(e) => handleParamChange('ranges', e.target.value)} />
+                                    )}
+                                    {files.length > 0 && toolSlug === 'extract-pages' && (
+                                        <TextField fullWidth label="Page Ranges to Extract (e.g., 2,4-6)" variant="outlined" value={params.ranges || ''} onChange={(e) => handleParamChange('ranges', e.target.value)} />
+                                    )}
+                                    {files.length > 0 && toolSlug === 'remove-pages' && (
+                                        <TextField fullWidth label="Page Numbers to Remove (e.g., 1,3)" variant="outlined" value={params.pages || ''} onChange={(e) => handleParamChange('pages', e.target.value)} />
+                                    )}
+                                    {files.length > 0 && toolSlug === 'rotate-pdf' && (
+                                        <TextField fullWidth label="Degrees (e.g., 90, 180, 270)" type="number" variant="outlined" value={params.degrees || '90'} onChange={(e) => handleParamChange('degrees', e.target.value)} />
+                                    )}
+                                    {files.length > 0 && (toolSlug === 'protect-pdf' || toolSlug === 'unlock-pdf') && (
+                                        <TextField fullWidth label="Password" type="password" variant="outlined" value={params.password || ''} onChange={(e) => handleParamChange('password', e.target.value)} />
+                                    )}
+                                    {files.length > 0 && (toolSlug === 'add-watermark' || toolSlug === 'sign-pdf') && (
+                                        <TextField fullWidth label="Text" variant="outlined" value={params.text || ''} onChange={(e) => handleParamChange('text', e.target.value)} />
+                                    )}
 
                                     <AnimatePresence>
                                         {error && (
@@ -169,16 +200,16 @@ export default function ToolPage() {
 
                                     <Button
                                         onClick={handleProcess}
-                                        disabled={(!file && !url) || (isUrlSupported && !url && !file)}
+                                        disabled={(!files.length && !url) || (isUrlSupported && !url && !files.length)}
                                         variant="contained"
                                         size="large"
                                         endIcon={<LucideIcons.ArrowRight size={20} />}
                                         sx={{
                                             py: 2, borderRadius: '16px', fontSize: '1.1rem', fontWeight: 700,
-                                            boxShadow: (file || url) ? `0 10px 20px -10px ${theme.palette.primary.main}` : 'none'
+                                            boxShadow: (files.length || url) ? `0 10px 20px -10px ${theme.palette.primary.main}` : 'none'
                                         }}
                                     >
-                                        Process File
+                                        Process {files.length > 1 ? `${files.length} Files` : 'File'}
                                     </Button>
                                 </motion.div>
                             )}
