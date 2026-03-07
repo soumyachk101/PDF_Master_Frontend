@@ -75,7 +75,7 @@ export function useFileUpload(toolSlug) {
                     const text = await error.response.data.text();
                     const json = JSON.parse(text);
                     message = json?.error?.message || json?.message || message;
-                } catch (_) { /* ignore parse errors */ }
+                } catch { /* ignore parse errors */ }
             } else if (error.response?.data?.error?.message) {
                 message = error.response.data.error.message;
             } else if (!error.response) {

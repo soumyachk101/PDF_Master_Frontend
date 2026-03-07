@@ -80,3 +80,12 @@
       radial-gradient(at 100% 100%, hsla(280, 100%, 15%, 1) 0px, transparent 50%);
   }
 }
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

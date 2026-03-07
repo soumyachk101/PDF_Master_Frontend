@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Box, Typography, IconButton, useTheme, Chip } from '@mui/material';
+import { Box, Typography, IconButton, Button, useTheme, Chip } from '@mui/material';
 import * as LucideIcons from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
-export default function DropzoneArea({ onFileSelect, accept, maxSize, selectedFiles, isUrlSupported, hasUrl, multiple }) {
+export default function DropzoneArea({ onFileSelect, accept, maxSize, selectedFiles, hasUrl, multiple }) {
     const theme = useTheme();
 
     const onDrop = useCallback(acceptedFiles => {
@@ -53,7 +53,7 @@ export default function DropzoneArea({ onFileSelect, accept, maxSize, selectedFi
                     textAlign: 'center',
                     bgcolor: isDragActive ? 'action.hover' : 'background.paper',
                     cursor: 'pointer',
-                    transition: 'all 0.2s',
+                    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                     position: 'relative',
                     overflow: 'hidden',
                     display: 'flex',
@@ -61,9 +61,14 @@ export default function DropzoneArea({ onFileSelect, accept, maxSize, selectedFi
                     alignItems: 'center',
                     justifyContent: 'center',
                     minHeight: '280px',
+                    boxShadow: isDragActive
+                        ? `0 0 0 4px ${alpha(theme.palette.primary.main, 0.15)}, 0 20px 40px -10px ${alpha(theme.palette.primary.main, 0.2)}`
+                        : '0 4px 20px rgba(0,0,0,0.02)',
                     '&:hover': {
                         borderColor: 'primary.main',
                         bgcolor: 'action.hover',
+                        transform: 'translateY(-2px)',
+                        boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}, 0 10px 25px rgba(0,0,0,0.05)`,
                     }
                 }}
             >
@@ -73,11 +78,13 @@ export default function DropzoneArea({ onFileSelect, accept, maxSize, selectedFi
                     {!selectedFiles || selectedFiles.length === 0 ? (
                         <motion.div key="upload-prompt" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Box sx={{
-                                width: 80, height: 80, borderRadius: '50%', mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                bgcolor: isDragReject ? alpha(theme.palette.error.main, 0.1) : isDragActive ? alpha(theme.palette.primary.main, 0.1) : 'background.default',
-                                color: isDragReject ? theme.palette.error.main : theme.palette.primary.main
+                                width: 88, height: 88, borderRadius: '50%', mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                bgcolor: isDragReject ? alpha(theme.palette.error.main, 0.1) : isDragActive ? alpha(theme.palette.primary.main, 0.15) : 'background.default',
+                                color: isDragReject ? theme.palette.error.main : theme.palette.primary.main,
+                                boxShadow: isDragActive ? `0 0 40px ${alpha(theme.palette.primary.main, 0.3)}` : 'none',
+                                transition: 'all 0.4s ease'
                             }}>
-                                {isDragReject ? <LucideIcons.XCircle size={40} /> : <LucideIcons.UploadCloud size={40} />}
+                                {isDragReject ? <LucideIcons.XCircle size={44} /> : <LucideIcons.UploadCloud size={44} />}
                             </Box>
                             <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: isDragReject ? 'error.main' : 'text.primary' }}>
                                 {isDragReject ? 'File type not supported' : isDragActive ? 'Drop it here!' : 'Choose files or drag & drop'}

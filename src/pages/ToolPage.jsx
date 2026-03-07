@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
 import { Box, Typography, Button, Container, Card, CircularProgress, TextField, InputAdornment, useTheme, Alert } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useFileUpload } from '../hooks/useFileUpload';
 import { getToolBySlug } from '../utils/tools';
 import DropzoneArea from '../components/DropzoneArea';
@@ -101,20 +101,20 @@ export default function ToolPage() {
             <Box sx={{ position: 'absolute', top: 0, right: 0, width: 500, height: 500, bgcolor: alpha(theme.palette.primary.main, 0.1), borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
             <Box sx={{ position: 'absolute', top: '20%', left: '-10%', width: 400, height: 400, bgcolor: 'rgba(168, 85, 247, 0.1)', borderRadius: '50%', filter: 'blur(150px)', pointerEvents: 'none', mixBlendMode: 'multiply' }} />
 
-            <Container maxWidth="md" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', py: { xs: 8, md: 12 }, position: 'relative', zIndex: 10 }}>
+            <Container maxWidth="md" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', py: { xs: 4, md: 6 }, position: 'relative', zIndex: 10 }}>
 
-                <Box component={Link} to="/" sx={{ alignSelf: 'flex-start', mb: 6, color: 'text.secondary', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1, fontWeight: 600, '&:hover': { color: 'primary.main' }, transition: 'color 0.2s' }}>
+                <Box component={Link} to="/" sx={{ alignSelf: 'flex-start', mb: 3, color: 'text.secondary', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1, fontWeight: 600, '&:hover': { color: 'primary.main' }, transition: 'color 0.2s' }}>
                     <LucideIcons.ArrowLeft size={16} /> Back to All Tools
                 </Box>
 
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} style={{ width: '100%', textAlign: 'center', marginBottom: '48px' }}>
+                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} style={{ width: '100%', textAlign: 'center', marginBottom: '24px' }}>
                     <Box sx={{
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 80, height: 80, borderRadius: '24px', mb: 3,
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 64, height: 64, borderRadius: '20px', mb: 2,
                         bgcolor: `${tool.color}15`, color: tool.color, boxShadow: theme.shadows[1], border: `1px solid ${theme.palette.divider}`
                     }}>
-                        <DynamicIcon name={tool.icon} size={40} />
+                        <DynamicIcon name={tool.icon} size={32} />
                     </Box>
-                    <Typography variant="h2" sx={{ fontWeight: 800, mb: 2, color: 'text.primary' }}>
+                    <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, color: 'text.primary' }}>
                         {tool.name}
                     </Typography>
                     <Typography variant="h6" sx={{ color: 'text.secondary', maxWidth: '600px', mx: 'auto', fontWeight: 400 }}>
@@ -124,7 +124,7 @@ export default function ToolPage() {
 
                 <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.6 }} style={{ width: '100%', maxWidth: '800px' }}>
                     <Card sx={{
-                        borderRadius: '32px', p: { xs: 4, md: 6 },
+                        borderRadius: '24px', p: { xs: 3, md: 4 },
                         position: 'relative', overflow: 'hidden',
                         boxShadow: `0 20px 40px -10px ${alpha(theme.palette.common.black, theme.palette.mode === 'light' ? 0.05 : 0.2)}`,
                         border: `1px solid ${theme.palette.divider}`

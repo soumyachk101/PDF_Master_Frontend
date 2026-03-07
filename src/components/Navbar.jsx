@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Box, Button, IconButton, Typography, useTheme, Card, Grid } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { ChevronDown, Moon, Sun, Menu, X, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { CATEGORIES, getToolsByCategory } from '../utils/tools';
-import { useColorMode } from '../App';
+import { useColorMode } from '../contexts/ColorModeContext';
 
 export default function Navbar() {
     const theme = useTheme();
@@ -41,10 +41,28 @@ export default function Navbar() {
             elevation={scrolled ? 2 : 0}
             sx={{
                 transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                bgcolor: alpha(theme.palette.background.paper, scrolled ? 0.85 : 1),
+                bgcolor: alpha(theme.palette.background.paper, scrolled ? 0.95 : 0.85),
                 backdropFilter: 'blur(16px)',
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 color: theme.palette.text.primary,
+                background: scrolled 
+                    ? mode === 'light'
+                        ? `linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,244,246,0.95) 100%)`
+                        : `linear-gradient(180deg, rgba(39,39,42,0.98) 0%, rgba(24,24,27,0.95) 100%)`
+                    : alpha(theme.palette.background.paper, 0.85),
+                boxShadow: scrolled
+                    ? mode === 'light'
+                        ? `
+                            inset 0 1px 0 rgba(255,255,255,0.8),
+                            0 4px 12px rgba(0,0,0,0.1),
+                            0 1px 0 rgba(0,0,0,0.05)
+                          `
+                        : `
+                            inset 0 1px 0 rgba(255,255,255,0.1),
+                            0 8px 24px rgba(0,0,0,0.4),
+                            0 1px 0 rgba(0,0,0,0.3)
+                          `
+                    : 'none',
             }}
         >
             <Toolbar
@@ -57,9 +75,27 @@ export default function Navbar() {
                     height: '64px',
                     minHeight: '64px !important',
                     padding: scrolled ? '0 24px' : '0 16px',
-                    background: scrolled ? theme.palette.background.paper : 'transparent',
-                    boxShadow: scrolled ? theme.shadows[4] : 'none',
-                    border: scrolled ? `1px solid ${theme.palette.divider}` : 'none',
+                    background: scrolled 
+                        ? mode === 'light' 
+                            ? `linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(243,244,246,0.9) 100%)`
+                            : `linear-gradient(180deg, rgba(39,39,42,0.95) 0%, rgba(24,24,27,0.9) 100%)`
+                        : 'transparent',
+                    boxShadow: scrolled
+                        ? mode === 'light'
+                            ? `
+                                inset 0 1px 0 rgba(255,255,255,0.7),
+                                0 6px 20px rgba(0,0,0,0.1),
+                                0 2px 0 rgba(0,0,0,0.05)
+                              `
+                            : `
+                                inset 0 1px 0 rgba(255,255,255,0.1),
+                                0 10px 30px rgba(0,0,0,0.5),
+                                0 2px 0 rgba(0,0,0,0.3)
+                              `
+                        : 'none',
+                    border: scrolled 
+                        ? `1px solid ${mode === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.08)'}`
+                        : 'none',
                     transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
             >
@@ -68,12 +104,12 @@ export default function Navbar() {
                     <Box sx={{ position: 'relative', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <motion.div
                             whileHover={{ rotate: 12, scale: 1.1 }}
-                            style={{ position: 'absolute', inset: 0, backgroundColor: alpha(theme.palette.primary.main, 0.2), borderRadius: '12px', transform: 'rotate(6deg)' }}
+                            style={{ position: 'absolute', inset: 0, backgroundColor: alpha('#22D3EE', 0.2), borderRadius: '12px', transform: 'rotate(6deg)' }}
                         />
                         <img src="/logo.png" alt="PDFKit Logo" style={{ width: 32, height: 32, objectFit: 'contain', position: 'relative', zIndex: 1 }} />
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: theme.palette.text.primary }}>
-                        <Box component="span" sx={{ color: theme.palette.primary.main, fontWeight: 900 }}>PDF</Box>Kit
+                        <Box component="span" sx={{ color: '#22D3EE', fontWeight: 900 }}>PDF</Box>Kit
                     </Typography>
                 </Box>
 
@@ -103,7 +139,7 @@ export default function Navbar() {
                                     <Card sx={{ width: 800, p: 4, borderRadius: '24px' }}>
                                         <Grid container spacing={4}>
                                             {CATEGORIES.filter(c => c.id !== 'all').map(category => (
-                                                <Grid item xs={3} key={category.id}>
+                                                <Grid xs={3} key={category.id}>
                                                     <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2, textTransform: 'uppercase', color: getToolsByCategory(category.id)[0]?.color }}>
                                                         {category.label}
                                                     </Typography>

@@ -27,7 +27,7 @@ export default function Footer() {
                 <Grid container spacing={{ xs: 6, lg: 4 }} sx={{ mb: { xs: 8, md: 10 } }}>
 
                     {/* Brand Column */}
-                    <Grid item xs={12} lg={4}>
+                    <Grid xs={12} lg={4}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', width: 'fit-content', '&:hover .logo-icon': { bgcolor: 'primary.main', color: '#fff', transform: 'rotate(-6deg)', boxShadow: `0 0 20px ${alpha(theme.palette.primary.main, 0.4)}` } }}>
                                 <Box className="logo-icon" sx={{
@@ -69,7 +69,7 @@ export default function Footer() {
                     </Grid>
 
                     {/* Categories Columns */}
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid xs={12} sm={6} md={4} lg={3}>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>Tools</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {CATEGORIES.filter(c => c.id !== 'all').slice(0, 4).map(cat => (
@@ -90,7 +90,7 @@ export default function Footer() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Grid xs={12} sm={6} md={4} lg={3}>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>More Tools</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {CATEGORIES.filter(c => c.id !== 'all').slice(4).map(cat => (
@@ -112,7 +112,7 @@ export default function Footer() {
                     </Grid>
 
                     {/* Legal / Company */}
-                    <Grid item xs={12} sm={6} md={4} lg={2}>
+                    <Grid xs={12} sm={6} md={4} lg={2}>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>Legal</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {['Privacy Policy', 'Terms of Service', 'About Us', 'Contact'].map((item, i) => (
