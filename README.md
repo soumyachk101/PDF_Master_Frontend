@@ -1,16 +1,94 @@
-# React + Vite
+# PDF Master Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite application for PDF manipulation, built with MUI, Tailwind CSS, and Vercel Analytics.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
 
-## React Compiler
+- Node.js ≥ 18
+- npm
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Installation
 
-## Expanding the ESLint configuration
+```bash
+npm install
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Running locally
+
+```bash
+npm run dev
+```
+
+The app starts on `http://localhost:5173` by default.
+
+## Environment Variables
+
+All environment variables exposed to the browser must be prefixed with `VITE_`.
+
+### Local setup
+
+1. Copy the example file:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+2. Open `.env.local` and fill in the values for your environment.
+
+> `.env.local` is listed in `.gitignore` and must **never** be committed.
+
+### Available variables
+
+| Variable | Description | Default (dev) |
+|---|---|---|
+| `VITE_API_URL` | Base URL of the backend API server | `http://localhost:4000` |
+
+### Setting variables in Vercel
+
+1. Go to your project in the [Vercel dashboard](https://vercel.com/dashboard).
+2. Open **Settings → Environment Variables**.
+3. Add each variable and choose which environments (Production, Preview, Development) it applies to.
+
+The `vercel.json` in this repo configures the build. Environment variables are managed separately via the Vercel dashboard or CLI:
+
+```bash
+# Add VITE_API_URL for production
+vercel env add VITE_API_URL production
+
+# Add VITE_API_URL for preview deployments
+vercel env add VITE_API_URL preview
+```
+
+Vercel makes any variable added this way available automatically during the build.
+
+## Vercel Deployments
+
+### Preview deployments
+
+Every push to a non-`main` branch and every pull request automatically triggers a **preview deployment** on Vercel. Each preview gets its own unique URL (e.g. `pdf-master-frontend-git-feature-branch.vercel.app`), so you can share and review changes before merging.
+
+### Production deployments
+
+Merging or pushing directly to `main` triggers a **production deployment**, which updates the live site.
+
+### Deploying with the Vercel CLI
+
+```bash
+# Install the CLI (once)
+npm i -g vercel
+
+# Deploy a preview
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server with HMR |
+| `npm run build` | Build for production (`dist/`) |
+| `npm run preview` | Locally preview the production build |
+| `npm run lint` | Run ESLint |
