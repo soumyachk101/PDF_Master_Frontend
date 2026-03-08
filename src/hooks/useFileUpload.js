@@ -35,7 +35,8 @@ export function useFileUpload(toolSlug) {
         });
 
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            const apiUrl = rawApiUrl.replace(/\/+$/, '');
             const response = await axios.post(`${apiUrl}/api/pdf/${toolSlug}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
