@@ -165,7 +165,7 @@ export default function Footer() {
 }
 
 function alpha(color, opacity) {
-    if (!color) return `rgba(226, 87, 76, ${opacity})`;
+    if (!color) return `rgba(37, 99, 235, ${opacity})`;
     if (color.startsWith('#')) {
         const r = parseInt(color.slice(1, 3), 16);
         const g = parseInt(color.slice(3, 5), 16);

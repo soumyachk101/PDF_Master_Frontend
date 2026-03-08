@@ -6,34 +6,37 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#E2574C',
-                    hover: '#C94B41',
-                    light: '#FDECEA',
-                    dark: '#A83B32',
-                    glow: 'rgba(226, 87, 76, 0.5)',
+                    DEFAULT: '#2563EB',
+                    hover: '#1D4ED8',
+                    light: '#60A5FA',
+                    dark: '#38BDF8',
+                    glow: 'rgba(37, 99, 235, 0.5)',
                 },
                 surface: {
                     DEFAULT: '#FFFFFF',
                     glass: 'rgba(255, 255, 255, 0.7)',
-                    dark: '#1E1E2E',
-                    deeper: '#11111B',
-                    glassDark: 'rgba(30, 30, 46, 0.65)',
+                    dark: '#18181B',
+                    deeper: '#09090B',
+                    glassDark: 'rgba(24, 24, 27, 0.65)',
                 },
                 border: {
-                    DEFAULT: '#E5E7EB',
+                    DEFAULT: '#E2E8F0',
                     glass: 'rgba(255, 255, 255, 0.4)',
-                    dark: '#313244',
+                    dark: '#27272A',
                     glassDark: 'rgba(255, 255, 255, 0.08)',
                 },
                 ink: {
-                    primary: '#111019',
-                    secondary: '#4B5563',
-                    muted: '#9CA3AF',
+                    primary: '#0F172A',
+                    secondary: '#334155',
+                    muted: '#94A3B8',
                 },
                 bg: {
                     DEFAULT: '#F8FAFC',
-                    dark: '#11111B',
+                    dark: '#09090B',
                 },
+                accent: {
+                    DEFAULT: '#10B981',
+                }
             },
             fontFamily: {
                 display: ['Inter', 'system-ui', 'sans-serif'],
@@ -48,13 +51,13 @@ export default {
             },
             boxShadow: {
                 card: '0 8px 30px rgba(0,0,0,0.04)',
-                'card-hover': '0 20px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(226, 87, 76, 0.1)',
+                'card-hover': '0 20px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(37, 99, 235, 0.1)',
                 'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
                 'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
-                'btn-red': '0 8px 16px rgba(226,87,76,0.25), 0 0 0 1px rgba(226,87,76,1)',
+                'btn-primary': '0 8px 16px rgba(37, 99, 235,0.25), 0 0 0 1px rgba(37, 99, 235,1)',
                 navbar: '0 4px 30px rgba(0, 0, 0, 0.04)',
                 modal: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                glow: '0 0 30px rgba(226, 87, 76, 0.4)',
+                glow: '0 0 30px rgba(37, 99, 235, 0.4)',
             },
             maxWidth: {
                 content: '1280px',
@@ -97,8 +100,8 @@ export default {
                     "100%": { transform: "translate(0px, 0px) scale(1)" },
                 },
                 pulseGlow: {
-                    '0%, 100%': { boxShadow: '0 0 15px rgba(226, 87, 76, 0.2)' },
-                    '50%': { boxShadow: '0 0 30px rgba(226, 87, 76, 0.6)' },
+                    '0%, 100%': { boxShadow: '0 0 15px rgba(37, 99, 235, 0.2)' },
+                    '50%': { boxShadow: '0 0 30px rgba(37, 99, 235, 0.6)' },
                 }
             },
         },

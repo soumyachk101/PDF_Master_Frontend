@@ -61,23 +61,13 @@
     @apply bg-surface-glassDark backdrop-blur-xl border border-border-glassDark shadow-glass-dark;
   }
 
-  /* Mesh gradients for modern backgrounds */
+  /* Mesh gradients removed in favor of exact flat colors */
   .bg-mesh-light {
-    background-color: #f8fafc;
-    background-image:
-      radial-gradient(at 0% 0%, hsla(356, 86%, 85%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(220, 100%, 88%, 1) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, hsla(40, 100%, 88%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, hsla(280, 100%, 88%, 1) 0px, transparent 50%);
+    background-color: #F8FAFC;
   }
 
   .bg-mesh-dark {
-    background-color: #11111b;
-    background-image:
-      radial-gradient(at 0% 0%, hsla(356, 86%, 15%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(220, 100%, 15%, 1) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, hsla(40, 100%, 15%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, hsla(280, 100%, 15%, 1) 0px, transparent 50%);
+    background-color: #09090B;
   }
 }
 

@@ -318,7 +318,7 @@ export default function ToolPage() {
 }
 
 function alpha(color, opacity) {
-    if (!color) return `rgba(226, 87, 76, ${opacity})`;
+    if (!color) return `rgba(37, 99, 235, ${opacity})`;
     if (color.startsWith('#')) {
         let r = parseInt(color.slice(1, 3), 16),
             g = parseInt(color.slice(3, 5), 16),

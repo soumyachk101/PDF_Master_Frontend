@@ -40,76 +40,46 @@ export default function Navbar() {
             position="fixed"
             elevation={scrolled ? 2 : 0}
             sx={{
-                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                bgcolor: alpha(theme.palette.background.paper, scrolled ? 0.95 : 0.85),
-                backdropFilter: 'blur(16px)',
-                borderBottom: `1px solid ${theme.palette.divider}`,
+                transition: 'all 0.3s ease',
+                bgcolor: scrolled ? alpha(theme.palette.background.paper, 0.8) : 'transparent',
+                backdropFilter: scrolled ? 'blur(12px)' : 'none',
+                borderBottom: scrolled ? `1px solid ${theme.palette.divider}` : 'none',
                 color: theme.palette.text.primary,
-                background: scrolled 
-                    ? mode === 'light'
-                        ? `linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,244,246,0.95) 100%)`
-                        : `linear-gradient(180deg, rgba(39,39,42,0.98) 0%, rgba(24,24,27,0.95) 100%)`
-                    : alpha(theme.palette.background.paper, 0.85),
                 boxShadow: scrolled
                     ? mode === 'light'
-                        ? `
-                            inset 0 1px 0 rgba(255,255,255,0.8),
-                            0 4px 12px rgba(0,0,0,0.1),
-                            0 1px 0 rgba(0,0,0,0.05)
-                          `
-                        : `
-                            inset 0 1px 0 rgba(255,255,255,0.1),
-                            0 8px 24px rgba(0,0,0,0.4),
-                            0 1px 0 rgba(0,0,0,0.3)
-                          `
+                        ? '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+                        : '0 4px 6px -1px rgba(0, 0, 0, 0.2)'
                     : 'none',
             }}
         >
             <Toolbar
                 disableGutters
                 sx={{
-                    maxWidth: scrolled ? '1024px' : '1200px',
+                    maxWidth: '1200px',
                     width: '100%',
                     margin: '0 auto',
-                    borderRadius: scrolled ? '999px' : '0px',
                     height: '64px',
                     minHeight: '64px !important',
-                    padding: scrolled ? '0 24px' : '0 16px',
-                    background: scrolled 
-                        ? mode === 'light' 
-                            ? `linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(243,244,246,0.9) 100%)`
-                            : `linear-gradient(180deg, rgba(39,39,42,0.95) 0%, rgba(24,24,27,0.9) 100%)`
-                        : 'transparent',
-                    boxShadow: scrolled
-                        ? mode === 'light'
-                            ? `
-                                inset 0 1px 0 rgba(255,255,255,0.7),
-                                0 6px 20px rgba(0,0,0,0.1),
-                                0 2px 0 rgba(0,0,0,0.05)
-                              `
-                            : `
-                                inset 0 1px 0 rgba(255,255,255,0.1),
-                                0 10px 30px rgba(0,0,0,0.5),
-                                0 2px 0 rgba(0,0,0,0.3)
-                              `
-                        : 'none',
-                    border: scrolled 
-                        ? `1px solid ${mode === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.08)'}`
-                        : 'none',
-                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                    padding: '0 16px',
+                    transition: 'all 0.3s ease',
                 }}
             >
                 {/* Logo */}
                 <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: 'inherit' }}>
-                    <Box sx={{ position: 'relative', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <motion.div
-                            whileHover={{ rotate: 12, scale: 1.1 }}
-                            style={{ position: 'absolute', inset: 0, backgroundColor: alpha('#22D3EE', 0.2), borderRadius: '12px', transform: 'rotate(6deg)' }}
-                        />
-                        <img src="/logo.png" alt="PDFKit Logo" style={{ width: 32, height: 32, objectFit: 'contain', position: 'relative', zIndex: 1 }} />
+                    <Box sx={{ 
+                        position: 'relative', 
+                        width: 36, 
+                        height: 36, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        bgcolor: alpha(mode === 'light' ? '#2563EB' : '#38BDF8', 0.1),
+                        borderRadius: '10px'
+                    }}>
+                        <img src="/logo.png" alt="PDFKit Logo" style={{ width: 24, height: 24, objectFit: 'contain', position: 'relative', zIndex: 1 }} />
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: theme.palette.text.primary }}>
-                        <Box component="span" sx={{ color: '#22D3EE', fontWeight: 900 }}>PDF</Box>Kit
+                        <Box component="span" sx={{ color: mode === 'light' ? '#2563EB' : '#38BDF8', fontWeight: 900 }}>PDF</Box>Kit
                     </Typography>
                 </Box>
 
@@ -205,6 +175,108 @@ export default function Navbar() {
                         {isMobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
                     </IconButton>
                 </Box>
+                {/* Mobile Menu Backdrop */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            style={{
+                                position: 'fixed',
+                                inset: 0,
+                                background: 'rgba(0,0,0,0.5)',
+                                backdropFilter: 'blur(4px)',
+                                zIndex: 1999,
+                            }}
+                        />
+                    )}
+                </AnimatePresence>
+
+                {/* Mobile Menu Overlay */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, x: '100%' }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            style={{
+                                position: 'fixed',
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                width: '100%',
+                                maxWidth: '300px',
+                                background: theme.palette.background.paper,
+                                zIndex: 2000,
+                                boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
+                                padding: '24px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '16px'
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                                    <Box component="span" sx={{ color: mode === 'light' ? '#2563EB' : '#38BDF8' }}>PDF</Box>Kit
+                                </Typography>
+                                <IconButton onClick={() => setIsMobileMenuOpen(false)}>
+                                    <X size={24} />
+                                </IconButton>
+                            </Box>
+
+                            <Button 
+                                fullWidth 
+                                onClick={() => { setIsMobileMenuOpen(false); navigate('/'); }}
+                                sx={{ justifyContent: 'flex-start', py: 1.5, fontWeight: 600 }}
+                            >
+                                Home
+                            </Button>
+                            
+                            <Box sx={{ mt: 1 }}>
+                                <Typography variant="caption" sx={{ fontWeight: 800, textTransform: 'uppercase', color: 'text.secondary', ml: 1, mb: 1, display: 'block' }}>
+                                    Categories
+                                </Typography>
+                                {CATEGORIES.filter(c => c.id !== 'all').map(category => (
+                                    <Button
+                                        key={category.id}
+                                        fullWidth
+                                        onClick={() => { 
+                                            setIsMobileMenuOpen(false); 
+                                            const el = document.getElementById('tools');
+                                            if (el) el.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        sx={{ 
+                                            justifyContent: 'flex-start', 
+                                            py: 1, 
+                                            color: getToolsByCategory(category.id)[0]?.color,
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        {category.label}
+                                    </Button>
+                                ))}
+                            </Box>
+
+                            <Box sx={{ flexGrow: 1 }} />
+
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                onClick={() => { 
+                                    setIsMobileMenuOpen(false); 
+                                    const el = document.getElementById('tools');
+                                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                                sx={{ py: 1.5, borderRadius: '12px', fontWeight: 800 }}
+                            >
+                                Get Started
+                            </Button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </Toolbar>
         </AppBar>
     );
