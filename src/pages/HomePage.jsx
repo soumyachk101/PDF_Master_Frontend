@@ -376,6 +376,7 @@ function HomePage() {
     <Box id="tools" component="section" sx={{
         py: { xs: 10, md: 15 }, px: 3, position: 'relative',
         bgcolor: mode === 'light' ? '#F8FAFC' : '#09090B',
+        scrollMarginTop: '64px'
     }}>
     <Container maxWidth="xl">
         {/* Tools Section Heading - Simplified */}

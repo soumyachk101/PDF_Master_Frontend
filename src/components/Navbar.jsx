@@ -160,7 +160,8 @@ export default function Navbar() {
                     <Button
                         variant="contained"
                         color="primary"
-                        href="#tools"
+                        component={Link}
+                        to="/#tools"
                         endIcon={<ArrowRight size={16} />}
                         sx={{ borderRadius: '99px', px: 3, fontWeight: 700 }}
                     >
@@ -277,8 +278,7 @@ export default function Navbar() {
                                 fullWidth
                                 onClick={() => { 
                                     setIsMobileMenuOpen(false); 
-                                    const el = document.getElementById('tools');
-                                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                                    navigate('/#tools');
                                 }}
                                 sx={{ py: 1.5, borderRadius: '12px', fontWeight: 800 }}
                             >

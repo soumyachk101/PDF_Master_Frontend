@@ -111,7 +111,7 @@ export default function ToolPage() {
 
             <Container maxWidth="md" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', py: { xs: 4, md: 6 }, position: 'relative', zIndex: 10 }}>
 
-                <Box component={Link} to="/" sx={{ alignSelf: 'flex-start', mb: 3, color: 'text.secondary', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1, fontWeight: 600, '&:hover': { color: 'primary.main' }, transition: 'color 0.2s' }}>
+                <Box component={Link} to="/#tools" sx={{ alignSelf: 'flex-start', mb: 3, color: 'text.secondary', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1, fontWeight: 600, '&:hover': { color: 'primary.main' }, transition: 'color 0.2s' }}>
                     <LucideIcons.ArrowLeft size={16} /> Back to All Tools
                 </Box>
 

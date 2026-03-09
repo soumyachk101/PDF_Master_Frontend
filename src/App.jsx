@@ -49,11 +49,46 @@ const PageLoader = () => (
   </Box>
 );
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
+function ScrollToHash({ isInitializing }) {
+  const { pathname, hash } = useLocation();
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (isInitializing) return;
+
+    if (hash) {
+      const id = hash.replace('#', '');
+      
+      const scrollToElement = () => {
+        const element = document.getElementById(id);
+        if (element) {
+          // Add a small delay for the layout to settle
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+          return true;
+        }
+        return false;
+      };
+
+      // Try immediately
+      if (!scrollToElement()) {
+        const interval = setInterval(() => {
+          if (scrollToElement()) {
+            clearInterval(interval);
+          }
+        }, 100);
+
+        const timeout = setTimeout(() => clearInterval(interval), 3000);
+        return () => {
+          clearInterval(interval);
+          clearTimeout(timeout);
+        };
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash, isInitializing]);
+
   return null;
 }
 
@@ -62,7 +97,6 @@ export default function App() {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    // Premium loading experience: ensure loader stays for at least 800ms
     const timer = setTimeout(() => {
       setIsInitializing(false);
     }, 800);
@@ -81,7 +115,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          <ScrollToTop />
+          <ScrollToHash isInitializing={isInitializing} />
           <Navbar />
           <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
             {isInitializing ? (
