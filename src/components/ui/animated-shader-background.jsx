@@ -15,22 +15,11 @@ const AnoAI = () => {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     
     // Set initial size
-    const updateSize = () => {
-      const width = container.offsetWidth || window.innerWidth;
-      const height = container.offsetHeight || window.innerHeight;
-      renderer.setSize(width, height);
-      material.uniforms.iResolution.value.set(width, height);
-    };
-    updateSize();
-
-    container.appendChild(renderer.domElement);
-
     const material = new THREE.ShaderMaterial({
       uniforms: {
         iTime: { value: 0 },
-        iResolution: { value: new THREE.Vector2(container.offsetWidth, container.offsetHeight) }
+        iResolution: { value: new THREE.Vector2() }
       },
-      // ... vertexShader and fragmentShader remain the same string literals ...
       vertexShader: `
         void main() {
           gl_Position = vec4(position, 1.0);
@@ -99,6 +88,16 @@ const AnoAI = () => {
         }
       `
     });
+
+    const updateSize = () => {
+      const width = container.offsetWidth || window.innerWidth;
+      const height = container.offsetHeight || window.innerHeight;
+      renderer.setSize(width, height);
+      if (material.uniforms.iResolution) {
+        material.uniforms.iResolution.value.set(width, height);
+      }
+    };
+    updateSize();
 
     const geometry = new THREE.PlaneGeometry(2, 2);
     const mesh = new THREE.Mesh(geometry, material);
