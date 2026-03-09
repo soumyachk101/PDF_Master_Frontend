@@ -48,8 +48,8 @@ export default function Footer() {
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                                 {[
-                                    { icon: Twitter, x: '#', label: 'Twitter' },
-                                    { icon: Github, x: '#', label: 'GitHub' },
+                                    { icon: Twitter, x: 'https://x.com/soumyachk1', label: 'Twitter' },
+                                    { icon: Github, x: 'https://github.com/soumyachk101', label: 'GitHub' },
                                     { icon: MessageCircle, x: '#', label: 'Discord' }
                                 ].map((social, i) => {
                                     const Icon = social.icon;
