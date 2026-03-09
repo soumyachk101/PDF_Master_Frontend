@@ -99,6 +99,8 @@ const AnoAI = () => {
     };
     updateSize();
 
+    container.appendChild(renderer.domElement);
+
     const geometry = new THREE.PlaneGeometry(2, 2);
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
@@ -129,7 +131,7 @@ const AnoAI = () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener('resize', handleResize);
       resizeObserver.disconnect();
-      if (container && renderer.domElement) {
+      if (container && renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
       geometry.dispose();
