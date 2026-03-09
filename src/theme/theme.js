@@ -21,7 +21,7 @@ const getModernTokens = (mode) => ({
         },
         text: {
             primary: mode === 'light' ? '#0F172A' : '#FAFAFA',
-            secondary: mode === 'light' ? '#334155' : '#D4D4D8',
+            secondary: mode === 'light' ? '#475569' : '#D4D4D8', // Darkened for better contrast in light mode
         },
         divider: mode === 'light' ? '#E2E8F0' : '#27272A',
     },

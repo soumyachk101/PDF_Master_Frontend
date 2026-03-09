@@ -303,7 +303,7 @@ function HomePage() {
                                 transform: 'translateY(-4px)',
                             }
                         }}>
-                            <Typography variant="h4" sx={{
+                            <Typography component="div" sx={{
                                 fontSize: { xs: '1.5rem', md: '2rem' },
                                 fontWeight: 900,
                                 color: mode === 'light' ? '#2563EB' : '#38BDF8',
@@ -572,7 +572,7 @@ function HomePage() {
                                     </Box>
                                 </Box>
                                 <Box>
-                                    <Typography variant="h6" component="h3" sx={{
+                                    <Typography variant="subtitle1" component="h3" sx={{
                                         color: mode === 'light' ? '#0F172A' : '#FAFAFA',
                                         fontWeight: 700,
                                         mb: 0.5, fontSize: '0.95rem',

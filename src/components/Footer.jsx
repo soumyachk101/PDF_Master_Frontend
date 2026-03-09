@@ -35,7 +35,7 @@ export default function Footer() {
                                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main',
                                     transition: 'all 0.3s ease', boxShadow: theme.shadows[1]
                                 }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
                                 </Box>
                                 <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary' }}>
                                     <Box component="span" sx={{ color: 'primary.main', fontWeight: 900 }}>PDF</Box>Kit
@@ -48,13 +48,13 @@ export default function Footer() {
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                                 {[
-                                    { icon: Twitter, x: '#' },
-                                    { icon: Github, x: '#' },
-                                    { icon: MessageCircle, x: '#' }
+                                    { icon: Twitter, x: '#', label: 'Twitter' },
+                                    { icon: Github, x: '#', label: 'GitHub' },
+                                    { icon: MessageCircle, x: '#', label: 'Discord' }
                                 ].map((social, i) => {
                                     const Icon = social.icon;
                                     return (
-                                        <IconButton key={i} href={social.x} size="medium" sx={{
+                                        <IconButton key={i} href={social.x} aria-label={social.label} size="medium" sx={{
                                             bgcolor: 'background.default', border: `1px solid ${theme.palette.divider}`,
                                             color: 'text.secondary',
                                             '&:hover': { color: 'primary.main', borderColor: alpha(theme.palette.primary.main, 0.5), bgcolor: alpha(theme.palette.primary.main, 0.05) },

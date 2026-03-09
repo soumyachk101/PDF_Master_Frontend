@@ -122,7 +122,7 @@ export default function ToolPage() {
                     }}>
                         <DynamicIcon name={tool.icon} size={32} />
                     </Box>
-                    <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, color: 'text.primary' }}>
+                    <Typography variant="h3" component="h1" sx={{ fontWeight: 800, mb: 1, color: 'text.primary' }}>
                         {tool.name}
                     </Typography>
                     <Typography variant="h6" sx={{ color: 'text.secondary', maxWidth: '600px', mx: 'auto', fontWeight: 400 }}>
@@ -286,12 +286,12 @@ export default function ToolPage() {
 
                 {/* SEO Rich Content Section */}
                 <Box sx={{ mt: 10, mb: 4, width: '100%', maxWidth: '800px', textAlign: 'left' }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, mb: 3, color: 'text.primary' }}>How to {tool.name}</Typography>
+                    <Typography variant="h4" component="h2" sx={{ fontWeight: 800, mb: 3, color: 'text.primary' }}>How to {tool.name}</Typography>
                     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 5, lineHeight: 1.8, fontSize: '1.1rem' }}>
                         {tool.seoArticle || `Use our free online tool to ${tool.name.toLowerCase()} instantly. Upload your file above and let our secure servers do the heavy lifting. No installation required.`}
                     </Typography>
 
-                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: 'text.primary' }}>Why use PDFKit?</Typography>
+                    <Typography variant="h5" component="h2" sx={{ fontWeight: 700, mb: 2, color: 'text.primary' }}>Why use PDFKit?</Typography>
                     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 5, lineHeight: 1.8, fontSize: '1.1rem' }}>
                         <strong>100% Private & Secure:</strong> We take your privacy seriously. Files are never stored permanently, ensuring your data remains completely secure. No account or email required to use our tools.
                         <br/><br/>
@@ -300,11 +300,11 @@ export default function ToolPage() {
 
                     {tool.faqs && tool.faqs.length > 0 && (
                         <Box sx={{ mt: 2 }}>
-                            <Typography variant="h5" sx={{ fontWeight: 700, mb: 4, color: 'text.primary' }}>Frequently Asked Questions</Typography>
+                            <Typography variant="h5" component="h2" sx={{ fontWeight: 700, mb: 4, color: 'text.primary' }}>Frequently Asked Questions</Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                                 {tool.faqs.map((faq, i) => (
                                     <Box key={i} sx={{ p: 3, bgcolor: alpha(theme.palette.divider, 0.05), border: `1px solid ${theme.palette.divider}`, borderRadius: '16px' }}>
-                                        <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem', mb: 1, color: 'text.primary' }}>{faq.q}</Typography>
+                                        <Typography variant="h6" component="h3" sx={{ fontWeight: 700, fontSize: '1.1rem', mb: 1, color: 'text.primary' }}>{faq.q}</Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6, fontSize: '1.05rem' }}>{faq.a}</Typography>
                                     </Box>
                                 ))}
