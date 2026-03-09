@@ -59,6 +59,15 @@ function ScrollToTop() {
 
 export default function App() {
   const [mode, setMode] = useState('dark');
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    // Premium loading experience: ensure loader stays for at least 800ms
+    const timer = setTimeout(() => {
+      setIsInitializing(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const colorMode = useMemo(() => ({
     mode,
@@ -75,15 +84,19 @@ export default function App() {
           <ScrollToTop />
           <Navbar />
           <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/tool/:toolSlug" element={<ToolPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
+            {isInitializing ? (
+              <PageLoader />
+            ) : (
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/tool/:toolSlug" element={<ToolPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            )}
           </main>
-          <Footer />
+          {!isInitializing && <Footer />}
         </BrowserRouter>
       </ThemeProvider>
     </ColorModeContext.Provider>
