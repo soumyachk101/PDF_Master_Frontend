@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import { ColorModeContext } from './contexts/ColorModeContext';
 import { Suspense, lazy } from 'react';
 
-const HomePage = lazy(() => import('./pages/HomePage'));
+import HomePage from './pages/HomePage';
 const ToolPage = lazy(() => import('./pages/ToolPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 

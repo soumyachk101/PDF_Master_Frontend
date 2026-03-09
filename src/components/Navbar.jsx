@@ -76,7 +76,7 @@ export default function Navbar() {
                         bgcolor: alpha(mode === 'light' ? '#2563EB' : '#38BDF8', 0.1),
                         borderRadius: '10px'
                     }}>
-                        <img src="/logo.png" alt="PDFKit Logo" style={{ width: 24, height: 24, objectFit: 'contain', position: 'relative', zIndex: 1 }} />
+                        <img src="/logo.png" alt="PDFKit Logo" width="24" height="24" style={{ width: 24, height: 24, objectFit: 'contain', position: 'relative', zIndex: 1 }} />
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: theme.palette.text.primary }}>
                         <Box component="span" sx={{ color: mode === 'light' ? '#2563EB' : '#38BDF8', fontWeight: 900 }}>PDF</Box>Kit
