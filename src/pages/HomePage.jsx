@@ -97,12 +97,9 @@ function HomePage() {
                 }}
             >
                 {/* Main Hero Background Setup */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        inset: 0,
-                    }}
-                />
+                <Suspense fallback={null}>
+                    <AnimatedShaderBackground />
+                </Suspense>
 
                 {/* Grid Pattern Overlay */}
                 <Box
@@ -181,24 +178,24 @@ function HomePage() {
                                         <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
                                             Your
                                         </motion.span>{' '}
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#2563EB' : '#38BDF8' }}>
+                                            PDFs.
+                                        </motion.span>
                                         <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
-                                        PDFs.
-                                    </motion.span>{' '}
-                                    <br sx={{ display: { xs: 'none', sm: 'block' } }} />
-                                    <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
-                                        Your
-                                    </motion.span>{' '}
-                                    <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
-                                        browser.
-                                    </motion.span>
-                                    <br />
-                                    <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
-                                        Your
-                                    </motion.span>{' '}
-                                    <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#64748B' : '#A1A1AA' }}>
-                                        rules.
-                                    </motion.span>
-                                </Typography>
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
+                                            Your
+                                        </motion.span>{' '}
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
+                                            browser.
+                                        </motion.span>
+                                        <br />
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
+                                            Your
+                                        </motion.span>{' '}
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#64748B' : '#A1A1AA' }}>
+                                            rules.
+                                        </motion.span>
+                                    </Typography>
                             </motion.div>
 
                             {/* Subtitle */}
@@ -212,12 +209,11 @@ function HomePage() {
                                     mb: 6,
                                     fontWeight: 400,
                                     lineHeight: 1.7,
-                                        < Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
-                                    }}>
-                                Merge, split, compress, and convert PDFs instantly right in your browser.{' '}
-                                <br sx={{ display: { xs: 'none', sm: 'block' } }} />
-                                No signups. No limits. Total privacy.
-                            </Typography>
+                                }}>
+                                    Merge, split, compress, and convert PDFs instantly right in your browser.{' '}
+                                    <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
+                                    No signups. No limits. Total privacy.
+                                </Typography>
                         </motion.div>
 
                         {/* CTA Buttons */}
@@ -412,16 +408,15 @@ function HomePage() {
                 </Box>
             </motion.div>
         </Container>
-        </Box >
+    </Box>
 
-        {/* ── TRUST STRIP ── */ }
-        < Box sx = {{
-        borderTop: `1px solid ${theme.palette.divider}`,
+        {/* ── TRUST STRIP ── */}
+        <Box sx={{
+            borderTop: `1px solid ${theme.palette.divider}`,
             borderBottom: `1px solid ${theme.palette.divider}`,
-                py: 5,
-                    bgcolor: mode === 'light' ? '#F8FAFC' : '#09090B',
-    }
-}>
+            py: 5,
+            bgcolor: mode === 'light' ? '#F8FAFC' : '#09090B',
+        }}>
     <Container maxWidth="lg">
         <Box sx={{
             display: 'flex',
@@ -457,11 +452,11 @@ function HomePage() {
             ))}
         </Box>
     </Container>
-    </Box >
+        </Box>
 
-    {/* ── MAIN TOOLS GRID ── */ }
-    < Box id = "tools" component = "section" sx = {{
-    py: { xs: 10, md: 15 }, px: 3, position: 'relative',
+    {/* ── MAIN TOOLS GRID ── */}
+    <Box id="tools" component="section" sx={{
+        py: { xs: 10, md: 15 }, px: 3, position: 'relative',
         bgcolor: mode === 'light' ? '#F8FAFC' : '#09090B',
     }}>
     <Container maxWidth="xl">
@@ -687,8 +682,8 @@ function HomePage() {
             </Box>
         </div>
     </Container>
-    </Box >
-        </Box >
+        </Box>
+    </Box>
     );
 };
 
