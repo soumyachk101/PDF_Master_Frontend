@@ -149,83 +149,93 @@ export default function Navbar() {
                     <Button href="#features" color="inherit" sx={{ fontWeight: 600, color: theme.palette.text.primary, '&:hover': { color: theme.palette.primary.main, background: 'transparent' } }}>Features</Button>
                     <Button href="#about" color="inherit" sx={{ fontWeight: 600, color: theme.palette.text.primary, '&:hover': { color: theme.palette.primary.main, background: 'transparent' } }}>About</Button>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, ml: 2 }}>
-                        <IconButton onClick={toggleDarkMode} sx={{ color: theme.palette.text.primary }}>
-                            {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
-                        </IconButton>
-                        <Box sx={{ width: '1px', height: 24, bgcolor: theme.palette.divider, mx: 1 }} />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            href="#tools"
-                            endIcon={<ArrowRight size={16} />}
-                            sx={{ borderRadius: '99px', px: 3, fontWeight: 700 }}
-                        >
-                            Get Started
-                        </Button>
-                    </Box>
+                    <IconButton 
+                        onClick={toggleDarkMode} 
+                        sx={{ color: theme.palette.text.primary }}
+                        aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                    >
+                        {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
+                    </IconButton>
+                    <Box sx={{ width: '1px', height: 24, bgcolor: theme.palette.divider, mx: 1 }} />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        href="#tools"
+                        endIcon={<ArrowRight size={16} />}
+                        sx={{ borderRadius: '99px', px: 3, fontWeight: 700 }}
+                    >
+                        Get Started
+                    </Button>
                 </Box>
 
-                {/* Mobile Toggle */}
-                <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
-                    <IconButton onClick={toggleDarkMode} sx={{ color: theme.palette.text.primary }}>
-                        {isDark ? <Sun size={20} strokeWidth={2.5} /> : <Moon size={20} strokeWidth={2.5} />}
-                    </IconButton>
-                    <IconButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} sx={{ color: theme.palette.text.primary }}>
-                        {isMobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
-                    </IconButton>
-                </Box>
-                {/* Mobile Menu Backdrop */}
-                <AnimatePresence>
-                    {isMobileMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            style={{
-                                position: 'fixed',
-                                inset: 0,
-                                background: 'rgba(0,0,0,0.5)',
-                                backdropFilter: 'blur(4px)',
-                                zIndex: 1999,
-                            }}
-                        />
-                    )}
-                </AnimatePresence>
+            {/* Mobile Toggle */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
+                <IconButton 
+                    onClick={toggleDarkMode} 
+                    sx={{ color: theme.palette.text.primary }}
+                    aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                >
+                    {isDark ? <Sun size={20} strokeWidth={2.5} /> : <Moon size={20} strokeWidth={2.5} />}
+                </IconButton>
+                <IconButton 
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                    sx={{ color: theme.palette.text.primary }}
+                    aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                >
+                    {isMobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
+                </IconButton>
+            </Box>
+            {/* Mobile Menu Backdrop */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.5)',
+                            backdropFilter: 'blur(4px)',
+                            zIndex: 1999,
+                        }}
+                    />
+                )}
+            </AnimatePresence>
 
-                {/* Mobile Menu Overlay */}
-                <AnimatePresence>
-                    {isMobileMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, x: '100%' }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: '100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            style={{
-                                position: 'fixed',
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                                width: '100%',
-                                maxWidth: '300px',
-                                background: theme.palette.background.paper,
-                                zIndex: 2000,
-                                boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
-                                padding: '24px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '16px'
-                            }}
-                        >
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-                                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                                    <Box component="span" sx={{ color: mode === 'light' ? '#2563EB' : '#38BDF8' }}>PDF</Box>Kit
-                                </Typography>
-                                <IconButton onClick={() => setIsMobileMenuOpen(false)}>
-                                    <X size={24} />
-                                </IconButton>
-                            </Box>
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            width: '100%',
+                            maxWidth: '300px',
+                            background: theme.palette.background.paper,
+                            zIndex: 2000,
+                            boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
+                            padding: '24px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '16px'
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                                <Box component="span" sx={{ color: mode === 'light' ? '#2563EB' : '#38BDF8' }}>PDF</Box>Kit
+                            </Typography>
+                            <IconButton onClick={() => setIsMobileMenuOpen(false)} aria-label="Close menu">
+                                <X size={24} />
+                            </IconButton>
+                        </Box>
 
                             <Button 
                                 fullWidth 

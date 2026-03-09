@@ -7,14 +7,23 @@ const AnoAI = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    // Disable on mobile or if user prefers reduced motion
+    const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (isMobile || prefersReducedMotion) return;
+
     const container = containerRef.current;
     if (!container) return;
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: false, // Turn off antialias for better performance
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
     
-    // Set initial size
     const material = new THREE.ShaderMaterial({
       uniforms: {
         iTime: { value: 0 },
@@ -29,7 +38,7 @@ const AnoAI = () => {
         uniform float iTime;
         uniform vec2 iResolution;
 
-        #define NUM_OCTAVES 3
+        #define NUM_OCTAVES 2
 
         float rand(vec2 n) {
           return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
@@ -67,9 +76,10 @@ const AnoAI = () => {
 
           float f = 2.0 + fbm(p + vec2(iTime * 5.0, 0.0)) * 0.5;
 
-          for (float i = 0.0; i < 35.0; i++) {
+          // Reduced loop count for performance (35 -> 20)
+          for (float i = 0.0; i < 20.0; i++) {
             v = p + cos(i * i + (iTime + p.x * 0.08) * 0.025 + i * vec2(13.0, 11.0)) * 3.5 + vec2(sin(iTime * 3.0 + i) * 0.003, cos(iTime * 3.5 - i) * 0.003);
-            float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 35.0));
+            float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 20.0));
             vec4 auroraColors = vec4(
               0.1 + 0.3 * sin(i * 0.2 + iTime * 0.4),
               0.3 + 0.5 * cos(i * 0.3 + iTime * 0.5),
@@ -77,7 +87,7 @@ const AnoAI = () => {
               1.0
             );
             vec4 currentContribution = auroraColors * exp(sin(i * i + iTime * 0.8)) / length(max(v, vec2(v.x * f * 0.015, v.y * 1.5)));
-            float thinnessFactor = smoothstep(0.0, 1.0, i / 35.0) * 0.6;
+            float thinnessFactor = smoothstep(0.0, 1.0, i / 20.0) * 0.6;
             o += currentContribution * (1.0 + tailNoise * 0.8) * thinnessFactor;
           }
 
@@ -92,6 +102,7 @@ const AnoAI = () => {
     const updateSize = () => {
       const width = container.offsetWidth || window.innerWidth;
       const height = container.offsetHeight || window.innerHeight;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap pixel ratio for performance
       renderer.setSize(width, height);
       if (material.uniforms.iResolution) {
         material.uniforms.iResolution.value.set(width, height);

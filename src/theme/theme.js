@@ -4,9 +4,9 @@ const getModernTokens = (mode) => ({
     palette: {
         mode,
         primary: {
-            main: mode === 'light' ? '#2563EB' : '#38BDF8',
-            light: mode === 'light' ? '#60A5FA' : '#7DD3FC',
-            dark: mode === 'light' ? '#1D4ED8' : '#0284C7',
+            main: mode === 'light' ? '#1D4ED8' : '#38BDF8',
+            light: mode === 'light' ? '#3B82F6' : '#7DD3FC',
+            dark: mode === 'light' ? '#1E40AF' : '#0284C7',
             contrastText: mode === 'light' ? '#FFFFFF' : '#09090B',
         },
         secondary: {
@@ -51,7 +51,7 @@ const getModernTokens = (mode) => ({
                     },
                 },
                 contained: {
-                    background: mode === 'light' ? '#2563EB' : '#38BDF8',
+                    background: mode === 'light' ? '#1D4ED8' : '#38BDF8',
                     color: mode === 'light' ? '#FFFFFF' : '#09090B',
                     boxShadow: mode === 'light' 
                         ? '0 2px 8px rgba(37, 99, 235, 0.25)' 

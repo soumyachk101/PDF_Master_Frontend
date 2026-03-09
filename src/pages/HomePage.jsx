@@ -131,9 +131,9 @@ function HomePage() {
 
                 <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 10 }}>
                     <Grid container spacing={4} alignItems="center">
-                        {/* Left Content Area */}
-                        <Grid item xs={12} lg={6}>
-                            <Box sx={{ textAlign: { xs: 'center', lg: 'left' }, maxWidth: '680px', mx: 'auto' }}>
+                        {/* Left Content Area - centered */}
+                        <Grid item xs={12}>
+                            <Box sx={{ textAlign: 'center', maxWidth: '800px', mx: 'auto' }}>
                                 {/* Announcement Badge */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
@@ -149,12 +149,12 @@ function HomePage() {
                                         mb: 4, backdropFilter: 'blur(12px)',
                                     }}>
                                         <Box sx={{
-                                            width: 8, height: 8, borderRadius: '50%', bgcolor: mode === 'light' ? '#2563EB' : '#38BDF8',
-                                            boxShadow: `0 0 8px ${mode === 'light' ? '#2563EB' : '#38BDF8'}`,
+                                            width: 8, height: 8, borderRadius: '50%', bgcolor: mode === 'light' ? '#1D4ED8' : '#38BDF8',
+                                            boxShadow: `0 0 8px ${mode === 'light' ? '#1D4ED8' : '#38BDF8'}`,
                                         }} />
                                         <Typography variant="caption" sx={{
                                             fontWeight: 700,
-                                            color: mode === 'light' ? '#2563EB' : '#38BDF8',
+                                            color: mode === 'light' ? '#1D4ED8' : '#38BDF8',
                                             fontSize: '0.85rem', letterSpacing: '0.5px',
                                         }}>
                                             ✨ PDFKit v2 is now live
@@ -178,7 +178,7 @@ function HomePage() {
                                         <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
                                             Your
                                         </motion.span>{' '}
-                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#2563EB' : '#38BDF8' }}>
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#1D4ED8' : '#38BDF8' }}>
                                             PDFs.
                                         </motion.span>
                                         <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
@@ -192,165 +192,83 @@ function HomePage() {
                                         <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>
                                             Your
                                         </motion.span>{' '}
-                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#64748B' : '#A1A1AA' }}>
+                                        <motion.span variants={itemVariants} style={{ display: 'inline-block', color: mode === 'light' ? '#475569' : '#D1D5DB' }}>
                                             rules.
                                         </motion.span>
                                     </Typography>
-                            </motion.div>
-
-                            {/* Subtitle */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7, delay: 0.5 }}
-                            >
-                                <Typography variant="h6" sx={{
-                                    color: mode === 'light' ? '#334155' : '#D4D4D8',
-                                    mb: 6,
-                                    fontWeight: 400,
-                                    lineHeight: 1.7,
-                                }}>
-                                    Merge, split, compress, and convert PDFs instantly right in your browser.{' '}
-                                    <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
-                                    No signups. No limits. Total privacy.
-                                </Typography>
-                        </motion.div>
-
-                        {/* CTA Buttons */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7, delay: 0.6 }}
-                        >
-                            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: { xs: 'center', lg: 'flex-start' }, gap: 2.5, mb: { xs: 8, lg: 0 } }}>
-                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                    <Button
-                                        component="a" href="#tools"
-                                        variant="contained"
-                                        size="large"
-                                        endIcon={<Icons.ArrowRight size={20} />}
-                                        sx={{
-                                            py: 2, px: 4, fontSize: '1.1rem', borderRadius: '14px',
-                                            fontWeight: 700,
-                                            boxShadow: mode === 'light'
-                                                ? '0 8px 32px rgba(37,99,235,0.3)'
-                                                : '0 8px 32px rgba(56,189,248,0.3)',
-                                            animation: 'pulseBtn 2s infinite alternate',
-                                            '@keyframes pulseBtn': {
-                                                '0%': { boxShadow: `0 0 0 0 ${alpha(mode === 'light' ? '#2563EB' : '#38BDF8', 0.4)}` },
-                                                '100%': { boxShadow: `0 0 0 15px ${alpha(mode === 'light' ? '#2563EB' : '#38BDF8', 0)}` }
-                                            }
-                                        }}
-                                    >
-                                        Explore 30+ Tools
-                                    </Button>
                                 </motion.div>
 
-                                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                                    <Button
-                                        component="a" href="#features"
-                                        variant="outlined"
-                                        size="large"
-                                        sx={{
-                                            py: 2, px: 4, fontSize: '1.1rem', borderRadius: '14px',
-                                            fontWeight: 600,
-                                            border: `2px solid ${mode === 'light' ? '#E2E8F0' : '#27272A'}`,
-                                            color: mode === 'light' ? '#0F172A' : '#FAFAFA',
-                                            '&:hover': {
-                                                border: `2px solid ${mode === 'light' ? '#CBD5E1' : '#3F3F46'}`,
-                                            }
-                                        }}
-                                    >
-                                        How it works
-                                    </Button>
+                                {/* Subtitle */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.7, delay: 0.5 }}
+                                >
+                                    <Typography variant="h6" sx={{
+                                        color: mode === 'light' ? '#334155' : '#D4D4D8',
+                                        mb: 6,
+                                        fontWeight: 400,
+                                        lineHeight: 1.7,
+                                    }}>
+                                        Merge, split, compress, and convert PDFs instantly right in your browser.{' '}
+                                        <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
+                                        No signups. No limits. Total privacy.
+                                    </Typography>
                                 </motion.div>
-                            </Box>
-                        </motion.div>
-                    </Box>
-                </Grid>
 
-                {/* Right Content Area - Parallax PDF Cards */}
-                <Grid item xs={12} lg={6} sx={{ display: { xs: 'none', lg: 'block' } }}>
-                    <Box sx={{ position: 'relative', height: '600px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {/* CTA Buttons */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.7, delay: 0.6 }}
+                                >
+                                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', gap: 2.5, mb: { xs: 8, lg: 10 } }}>
+                                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                            <Button
+                                                component="a" href="#tools"
+                                                variant="contained"
+                                                size="large"
+                                                endIcon={<Icons.ArrowRight size={20} />}
+                                                sx={{
+                                                    py: 2, px: 4, fontSize: '1.1rem', borderRadius: '14px',
+                                                    fontWeight: 700,
+                                                    boxShadow: mode === 'light'
+                                                        ? '0 8px 32px rgba(37,99,235,0.3)'
+                                                        : '0 8px 32px rgba(56,189,248,0.3)',
+                                                    animation: 'pulseBtn 2s infinite alternate',
+                                                    '@keyframes pulseBtn': {
+                                                        '0%': { boxShadow: `0 0 0 0 ${alpha(mode === 'light' ? '#1D4ED8' : '#38BDF8', 0.4)}` },
+                                                        '100%': { boxShadow: `0 0 0 15px ${alpha(mode === 'light' ? '#1D4ED8' : '#38BDF8', 0)}` }
+                                                    }
+                                                }}
+                                            >
+                                                Explore 30+ Tools
+                                            </Button>
+                                        </motion.div>
 
-                        {/* Card 1: Merge PDFs */}
-                        <motion.div
-                            style={{ x: parallaxX1, y: parallaxY1, position: 'absolute', top: '10%', right: '15%', zIndex: 3 }}
-                            animate={{ y: [0, -15, 0] }}
-                            transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-                        >
-                            <Box sx={{
-                                width: 220, p: 3, borderRadius: '24px',
-                                bgcolor: mode === 'light' ? 'rgba(255,255,255,0.8)' : 'rgba(24,24,27,0.8)',
-                                backdropFilter: 'blur(20px)',
-                                border: `1px solid ${mode === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.08)'}`,
-                                boxShadow: mode === 'light' ? '0 20px 40px rgba(0,0,0,0.05)' : '0 20px 40px rgba(0,0,0,0.5)',
-                                display: 'flex', flexDirection: 'column', gap: 2,
-                                transform: 'rotate(6deg)'
-                            }}>
-                                <Box sx={{ width: 48, height: 48, borderRadius: '16px', bgcolor: 'rgba(59, 130, 246, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6' }}>
-                                    <Icons.Files size={24} />
-                                </Box>
-                                <Box>
-                                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>Merge PDFs</Typography>
-                                    <Box sx={{ width: '60%', height: 6, borderRadius: '3px', bgcolor: mode === 'light' ? '#E2E8F0' : '#27272A', mt: 1 }} />
-                                    <Box sx={{ width: '40%', height: 6, borderRadius: '3px', bgcolor: mode === 'light' ? '#E2E8F0' : '#27272A', mt: 0.5 }} />
-                                </Box>
-                            </Box>
-                        </motion.div>
-
-                        {/* Card 2: Compress PDF */}
-                        <motion.div
-                            style={{ x: parallaxX2, y: parallaxY2, position: 'absolute', bottom: '15%', left: '10%', zIndex: 2 }}
-                            animate={{ y: [0, 20, 0] }}
-                            transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut', delay: 1 }}
-                        >
-                            <Box sx={{
-                                width: 200, p: 3, borderRadius: '24px',
-                                bgcolor: mode === 'light' ? 'rgba(255,255,255,0.85)' : 'rgba(24,24,27,0.85)',
-                                backdropFilter: 'blur(20px)',
-                                border: `1px solid ${mode === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.08)'}`,
-                                boxShadow: mode === 'light' ? '0 20px 40px rgba(0,0,0,0.05)' : '0 20px 40px rgba(0,0,0,0.5)',
-                                display: 'flex', flexDirection: 'column', gap: 2,
-                                transform: 'rotate(-4deg)'
-                            }}>
-                                <Box sx={{ width: 48, height: 48, borderRadius: '16px', bgcolor: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981' }}>
-                                    <Icons.Minimize2 size={24} />
-                                </Box>
-                                <Box>
-                                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: mode === 'light' ? '#0F172A' : '#FAFAFA' }}>Compress</Typography>
-                                    <Typography variant="caption" sx={{ color: '#10B981', fontWeight: 700 }}>-70%</Typography>
-                                    <Box sx={{ flexGrow: 1, height: 4, borderRadius: '2px', bgcolor: mode === 'light' ? '#E2E8F0' : '#27272A', overflow: 'hidden' }}>
-                                        <Box sx={{ width: '30%', height: '100%', bgcolor: '#10B981' }} />
+                                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                            <Button
+                                                component="a" href="#features"
+                                                variant="outlined"
+                                                size="large"
+                                                sx={{
+                                                    py: 2, px: 4, fontSize: '1.1rem', borderRadius: '14px',
+                                                    fontWeight: 600,
+                                                    border: `2px solid ${mode === 'light' ? '#E2E8F0' : '#27272A'}`,
+                                                    color: mode === 'light' ? '#0F172A' : '#FAFAFA',
+                                                    '&:hover': {
+                                                        border: `2px solid ${mode === 'light' ? '#CBD5E1' : '#3F3F46'}`,
+                                                    }
+                                                }}
+                                            >
+                                                How it works
+                                            </Button>
+                                        </motion.div>
                                     </Box>
-                                </Box>
+                                </motion.div>
                             </Box>
-                        </motion.div>
-
-                        {/* Card 3: Convert */}
-                        <motion.div
-                            style={{ x: parallaxX3, y: parallaxY3, position: 'absolute', top: '40%', right: '-5%', zIndex: 1 }}
-                            animate={{ y: [0, -10, 0] }}
-                            transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut', delay: 2 }}
-                        >
-                            <Box sx={{
-                                width: 180, p: 3, borderRadius: '24px',
-                                bgcolor: mode === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(24,24,27,0.7)',
-                                backdropFilter: 'blur(15px)',
-                                border: `1px solid ${mode === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.08)'}`,
-                                boxShadow: mode === 'light' ? '0 20px 40px rgba(0,0,0,0.05)' : '0 20px 40px rgba(0,0,0,0.4)',
-                                display: 'flex', flexDirection: 'column', gap: 2,
-                                transform: 'rotate(12deg)'
-                            }}>
-                                <Box sx={{ width: 48, height: 48, borderRadius: '16px', bgcolor: 'rgba(168, 85, 247, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A855F7' }}>
-                                    <Icons.RefreshCw size={24} />
-                                </Box>
-                            </Box>
-                        </motion.div>
-
-                    </Box>
-                </Grid>
-            </Grid>
+                        </Grid>
+                    </Grid>
 
             {/* Stats Section */}
             <motion.div
@@ -462,7 +380,7 @@ function HomePage() {
     <Container maxWidth="xl">
         {/* Tools Section Heading - Simplified */}
         <Box sx={{ mb: 6, textAlign: 'center' }}>
-            <Typography variant="h3" sx={{
+            <Typography variant="h2" sx={{
                 color: mode === 'light' ? '#0F172A' : '#FAFAFA',
                 mb: 2,
                 fontWeight: 800,
@@ -496,11 +414,12 @@ function HomePage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     fullWidth
+                    inputProps={{ 'aria-label': 'Search PDF tools' }}
                     sx={{
                         fontSize: '0.95rem',
                         color: mode === 'light' ? '#0F172A' : '#FAFAFA',
                         '& ::placeholder': {
-                            color: mode === 'light' ? '#9CA3AF' : '#71717A',
+                            color: mode === 'light' ? '#64748B' : '#9CA3AF',
                             opacity: 1,
                         },
                     }}
@@ -509,6 +428,7 @@ function HomePage() {
                     <Box
                         component="button"
                         onClick={() => setSearchQuery('')}
+                        aria-label="Clear search"
                         sx={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             width: 28, height: 28, borderRadius: '8px', flexShrink: 0,
@@ -652,7 +572,7 @@ function HomePage() {
                                     </Box>
                                 </Box>
                                 <Box>
-                                    <Typography variant="subtitle1" sx={{
+                                    <Typography variant="h6" component="h3" sx={{
                                         color: mode === 'light' ? '#0F172A' : '#FAFAFA',
                                         fontWeight: 700,
                                         mb: 0.5, fontSize: '0.95rem',
