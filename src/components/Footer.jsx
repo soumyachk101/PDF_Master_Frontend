@@ -50,7 +50,7 @@ export default function Footer() {
                                 {[
                                     { icon: Twitter, x: 'https://x.com/soumyachk1', label: 'Twitter' },
                                     { icon: Github, x: 'https://github.com/soumyachk101', label: 'GitHub' },
-                                    { icon: MessageCircle, x: '#', label: 'Discord' }
+                                    { icon: MessageCircle, x: 'https://discord.com/users/soumya.chk101', label: 'Discord' }
                                 ].map((social, i) => {
                                     const Icon = social.icon;
                                     return (
