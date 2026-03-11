@@ -1,0 +1,39 @@
+
+> frontend@0.0.0 lint
+> eslint .
+
+
+D:\PDF_Master\frontend\src\hooks\useFileUpload.js
+   21:37  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `tool`, but the source dependencies were [toolSlug]. Inferred different dependency than source.
+
+   19 |     }, []);
+   20 |
+>  21 |    const processFiles = useCallback(async (files = [], additionalData = {}) => {
+      |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  22 |         // Files can be empty for certain tools like html-to-pdf
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  23 |       if ((!files || files.length === 0) && !additionalData.url) return;
+      ΓÇª
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 114 |         }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 115 |     }, [toolSlug]);
+      | ^^^^^^ Could not preserve existing manual memoization
+  116 |
+  117 |     return {
+  118 |         appState,  react-hooks/preserve-manual-memoization
+  115:8   warning  React Hook useCallback has missing dependencies: 'tool?.outputExt' and 'tool?.outputMime'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+
+D:\PDF_Master\frontend\src\pages\HomePage.jsx
+  20:10  error  'cn' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u                   no-unused-vars
+  57:11  error  'parallaxX1' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+  58:11  error  'parallaxY1' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+  60:11  error  'parallaxX2' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+  61:11  error  'parallaxY2' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+  63:11  error  'parallaxX3' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+  64:11  error  'parallaxY3' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+Γ£û 9 problems (8 errors, 1 warning)
+

@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-body antialiased;
+
+    /* Custom clean scrollbar */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply bg-ink-muted/30 rounded-full border-[3px] border-transparent bg-clip-padding;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      @apply bg-ink-muted/50;
+    }
+  }
+
+  .dark body::-webkit-scrollbar-thumb {
+    @apply bg-white/10;
+  }
+
+  .dark body::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display text-ink-primary tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  .dark ::selection {
+    @apply bg-primary/40 text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface-glass backdrop-blur-xl border border-border-glass shadow-glass;
+  }
+
+  .glass-dark {
+    @apply bg-surface-glassDark backdrop-blur-xl border border-border-glassDark shadow-glass-dark;
+  }
+
+  /* Mesh gradients removed in favor of exact flat colors */
+  .bg-mesh-light {
+    background-color: #F8FAFC;
+  }
+
+  .bg-mesh-dark {
+    background-color: #09090B;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.loader {
+  width: 52px;
+  height: 52px;
+  border: 4px solid rgba(37, 99, 235, 0.1);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  border-bottom-color: #2563EB;
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.3));
+}
+
+.dark .loader {
+  border-color: rgba(56, 189, 248, 0.05);
+}
+.dark .loader::after {
+  border-bottom-color: #38BDF8;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4));
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
