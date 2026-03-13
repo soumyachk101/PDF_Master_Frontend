@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Box, Button, IconButton, Typography, useTheme, Card, Grid } from '@mui/material';
 import { alpha } from '@mui/material/styles';
@@ -48,6 +48,14 @@ export default function Navbar() {
     const dropdownRef = useRef(null);
 
     const primaryColor = isDark ? '#38BDF8' : '#2563EB';
+
+    // Memoize categorized tools for performance
+    const categorizedTools = useMemo(() => {
+        return CATEGORIES.filter(c => c.id !== 'all').map(category => ({
+            ...category,
+            tools: getToolsByCategory(category.id)
+        }));
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -166,8 +174,8 @@ export default function Navbar() {
                                         backdropFilter: 'blur(32px)',
                                     }}>
                                         <Grid container spacing={5}>
-                                            {CATEGORIES.filter(c => c.id !== 'all').map(category => {
-                                                const catTools = getToolsByCategory(category.id);
+                                            {categorizedTools.map(category => {
+                                                const catTools = category.tools;
                                                 // Get color from the first tool in category or fallback
                                                 const catColor = catTools[0]?.color || theme.palette.primary.main;
                                                 

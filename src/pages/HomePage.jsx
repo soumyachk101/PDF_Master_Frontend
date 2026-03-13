@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useDeferredValue } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { Box, Typography, Button, Container, Card, CardContent, useTheme, InputBase, IconButton } from '@mui/material';
@@ -19,6 +19,7 @@ function HomePage() {
     const mode = theme.palette.mode;
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const deferredSearchQuery = useDeferredValue(searchQuery);
     const navigate = useNavigate();
 
     // Dynamically calculate counts for categories
@@ -33,15 +34,15 @@ function HomePage() {
     const categoryTools = useMemo(() => getToolsByCategory(activeCategory), [activeCategory]);
     
     const displayedTools = useMemo(() => {
-        if (!searchQuery.trim()) return categoryTools;
-        const q = searchQuery.toLowerCase();
+        if (!deferredSearchQuery.trim()) return categoryTools;
+        const q = deferredSearchQuery.toLowerCase();
         return categoryTools.filter(tool => 
             tool.name.toLowerCase().includes(q) || 
             tool.shortDesc.toLowerCase().includes(q) || 
             tool.desc.toLowerCase().includes(q) || 
             tool.slug.toLowerCase().includes(q)
         );
-    }, [categoryTools, searchQuery]);
+    }, [categoryTools, deferredSearchQuery]);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -236,9 +237,9 @@ function HomePage() {
 
                     {/* Tools Grid with Robust Reveal */}
                     <Box sx={{ minHeight: '400px' }}>
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                             <motion.div
-                                key={activeCategory + searchQuery}
+                                layout
                                 variants={staggerContainer}
                                 initial="hidden"
                                 whileInView="show"
@@ -251,7 +252,14 @@ function HomePage() {
                             >
                                 {displayedTools.length > 0 ? (
                                     displayedTools.map((tool) => (
-                                        <motion.div key={tool.slug} variants={revealUp}>
+                                        <motion.div 
+                                            key={tool.slug} 
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
                                             <Card
                                                 component={motion.div}
                                                 variants={cardHover}
