@@ -7,7 +7,7 @@ export const TOOLS = [
         seoKeywords: 'merge pdf files without uploading, combine pdf online private, secure pdf merge',
         seoArticle: 'Use our free online tool to merge PDF files instantly without uploading them to external servers. Since processing is optimized for privacy, your files remain completely secure on your device. Just arrange the files in your preferred order and click merge.',
         faqs: [
-            { q: 'Can I merge PDF files without uploading?', a: 'Yes! PDFKit prioritizes your privacy. Your files are processed securely without being stored or analyzed by external cloud services.' },
+            { q: 'Can I merge PDF files without uploading?', a: 'Yes! DocShift prioritizes your privacy. Your files are processed securely without being stored or analyzed by external cloud services.' },
             { q: 'Is there a limit to how many files I can merge?', a: 'You can merge large batches of files simultaneously completely for free, without worrying about premium paywalls.' }
         ]
     },
@@ -85,7 +85,7 @@ export const TOOLS = [
 ]
 
 export const CATEGORIES = [
-    { id: 'all', label: 'All', count: 30 },
+    { id: 'all', label: 'All', count: 25 },
     { id: 'organize', label: 'Organize PDF', count: 6 },
     { id: 'optimize', label: 'Optimize PDF', count: 3 },
     { id: 'convertTo', label: 'Convert to PDF', count: 5 },

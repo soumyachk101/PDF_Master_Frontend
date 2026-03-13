@@ -2,6 +2,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Container, Grid, Typography, Link, IconButton, useTheme } from '@mui/material';
 import { CATEGORIES } from '../utils/tools';
 import { Twitter, Github, MessageCircle } from 'lucide-react'; // mapped social icons
+import { motion } from 'framer-motion';
+import { springPhysics, revealUp } from '../animations/variants';
 
 export default function Footer() {
     const theme = useTheme();
@@ -27,18 +29,21 @@ export default function Footer() {
                 <Grid container spacing={{ xs: 6, lg: 4 }} sx={{ mb: { xs: 8, md: 10 } }}>
 
                     {/* Brand Column */}
-                    <Grid xs={12} lg={4}>
+                    <Grid size={{ xs: 12, lg: 4 }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', width: 'fit-content', '&:hover .logo-icon': { bgcolor: 'primary.main', color: '#fff', transform: 'rotate(-6deg)', boxShadow: `0 0 20px ${alpha(theme.palette.primary.main, 0.4)}` } }}>
+                            <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', width: 'fit-content' }}>
                                 <Box className="logo-icon" sx={{
-                                    width: 40, height: 40, borderRadius: '16px', bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                    width: 40, height: 40, borderRadius: '12px', bgcolor: alpha(theme.palette.primary.main, 0.1),
                                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main',
                                     transition: 'all 0.3s ease', boxShadow: theme.shadows[1]
                                 }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
+                                    <svg width="24" height="24" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="8" y="4" width="20" height="24" rx="6" fill={alpha(theme.palette.primary.main, 0.2)} stroke={theme.palette.primary.main} strokeWidth="1.5" />
+                                        <rect x="4" y="8" width="20" height="24" rx="6" fill={theme.palette.primary.main} stroke={theme.palette.primary.main} strokeWidth="1.5" />
+                                    </svg>
                                 </Box>
-                                <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary' }}>
-                                    <Box component="span" sx={{ color: 'primary.main', fontWeight: 900 }}>PDF</Box>Kit
+                                <Typography variant="h5" sx={{ fontWeight: 900, letterSpacing: '-0.04em', color: 'text.primary', fontFamily: '"Space Grotesk", sans-serif' }}>
+                                    <Box component="span" sx={{ color: '#38BDF8' }}>DOC</Box>-SHIFT
                                 </Typography>
                             </Box>
 
@@ -69,7 +74,7 @@ export default function Footer() {
                     </Grid>
 
                     {/* Categories Columns */}
-                    <Grid xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>Tools</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {CATEGORIES.filter(c => c.id !== 'all').slice(0, 4).map(cat => (
@@ -90,7 +95,7 @@ export default function Footer() {
                         </Box>
                     </Grid>
 
-                    <Grid xs={12} sm={6} md={4} lg={3}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>More Tools</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {CATEGORIES.filter(c => c.id !== 'all').slice(4).map(cat => (
@@ -112,7 +117,7 @@ export default function Footer() {
                     </Grid>
 
                     {/* Legal / Company */}
-                    <Grid xs={12} sm={6} md={4} lg={2}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, color: 'text.primary' }}>Legal</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             {['Privacy Policy', 'Terms of Service', 'About Us', 'Contact'].map((item, i) => (
@@ -141,7 +146,7 @@ export default function Footer() {
                     display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'space-between', gap: 3
                 }}>
                     <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.secondary' }}>
-                        © {currentYear} <Box component="span" sx={{ color: 'text.primary', fontWeight: 700 }}>PDFKit</Box>. All rights reserved.
+                        © {currentYear} <Box component="span" sx={{ color: 'text.primary', fontWeight: 700 }}>DocShift</Box>. All rights reserved.
                     </Typography>
 
                     <Typography variant="caption" sx={{

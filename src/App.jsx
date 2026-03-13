@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider, CssBaseline, Box, Typography } from '@mui/material';
 import { lightTheme, darkTheme } from './theme/theme';
@@ -6,48 +6,50 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { ColorModeContext } from './contexts/ColorModeContext';
 import { Suspense, lazy } from 'react';
+import { motion } from 'framer-motion';
 
 import HomePage from './pages/HomePage';
 const ToolPage = lazy(() => import('./pages/ToolPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const PageLoader = () => (
-  <Box sx={{ 
-    display: 'flex', 
-    flexDirection: 'column',
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    height: '100vh', 
-    width: '100%',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 9999,
-    bgcolor: 'background.default',
-    gap: 3
-  }}>
-    <div className="loader"></div>
-    <Typography variant="body2" sx={{ 
-      color: 'text.secondary', 
-      fontWeight: 600, 
-      letterSpacing: '2px', 
-      textTransform: 'uppercase',
-      fontSize: '0.75rem',
-      opacity: 0.8,
-      animation: 'pulseText 1.5s ease-in-out infinite'
+    <Box sx={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh', 
+        width: '100%',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 9999,
+        bgcolor: 'background.default',
+        gap: 3
     }}>
-      Preparing PDFs
-    </Typography>
-    <style>
-      {`
-        @keyframes pulseText {
-          0%, 100% { opacity: 0.5; }
-          50% { opacity: 1; }
-        }
-      `}
-    </style>
-  </Box>
+        <div className="loader"></div>
+        <Typography variant="body2" sx={{ 
+            color: 'text.secondary', 
+            fontWeight: 600, 
+            letterSpacing: '2px', 
+            textTransform: 'uppercase',
+            fontSize: '0.75rem',
+            opacity: 0.8,
+            animation: 'pulseText 1.5s ease-in-out infinite'
+        }}>
+            Preparing PDFs
+        </Typography>
+        <style>
+            {`
+                @keyframes pulseText {
+                    0%, 100% { opacity: 0.5; }
+                    50% { opacity: 1; }
+                }
+            `}
+        </style>
+    </Box>
 );
+
 
 function ScrollToHash({ isInitializing }) {
   const { pathname, hash } = useLocation();
@@ -103,6 +105,14 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (mode === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [mode]);
+
   const colorMode = useMemo(() => ({
     mode,
     toggleColorMode: () => setMode(prev => prev === 'dark' ? 'light' : 'dark'),
@@ -115,6 +125,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
+          <div className="noise-overlay" />
           <ScrollToHash isInitializing={isInitializing} />
           <Navbar />
           <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
